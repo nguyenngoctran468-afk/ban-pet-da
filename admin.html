@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Xem Trước (Static)</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; margin: 0; background-color: #f4f7f6; }
+        .sidebar { width: 220px; background: #2c3e50; color: white; position: fixed; height: 100%; padding-top: 20px; }
+        .sidebar h3 { text-align: center; margin-bottom: 30px; }
+        .sidebar a { display: block; padding: 15px 20px; color: #ecf0f1; text-decoration: none; cursor: pointer; }
+        .sidebar a:hover, .sidebar a.active { background: #34495e; border-left: 4px solid #3498db; }
+        .content { margin-left: 220px; padding: 30px; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+        th, td { padding: 15px; border-bottom: 1px solid #edf2f7; text-align: left; }
+        th { background: #f8fafc; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+        .btn { padding: 6px 12px; background: #e74c3c; color: white; border-radius: 4px; border: none; font-size: 0.85rem; opacity: 0.5; }
+        .warning-banner { background: #fffbeb; color: #b45309; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #fde68a; }
+        .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>⚡ CRM ADMIN</h3>
+        <a id="nav-products" class="active" onclick="switchTab('products')">📦 Sản Phẩm</a>
+        <a id="nav-customers" onclick="switchTab('customers')">👥 Khách Hàng (Đã import)</a>
+        <a id="nav-orders" onclick="switchTab('orders')">🛒 Đơn Hàng</a>
+    </div>
+
+    <div class="content">
+        <div class="warning-banner">
+            <strong>Chế độ Xem Trước (Static View):</strong> Giao diện này được xuất tự động từ Database để người đánh giá (Reviewer) có thể xem data thật trên link public. Để thêm/sửa/xoá, tài khoản Admin cục bộ phải chạy trên http://127.0.0.1:3000.
+        </div>
+
+        <div id="tab-products" class="tab-pane active">
+            <h2 style="margin-top:0;">Quản lý Sản Phẩm</h2>
+            <table>
+                <tr><th>Tên Sản Phẩm</th><th>Giá</th><th>Mô tả</th><th>Tồn kho</th><th>Hành động</th></tr>
+                <tr><td>Đá Cưng</td><td>79,000đ</td><td>Đá cưng rất là cưng rồi!!!</td><td><span style='background: #def7ec; color: #03543f; padding: 4px 8px; border-radius: 12px; font-weight: bold;'>9</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Ebook Cẩm Nang Pet Đá</td><td>19,000đ</td><td>Hướng dẫn cách tâm sự với khối đá 'ơ lon' này khi bị dí deadline, cách dùng đá gõ nhẹ vào đầu để tịnh tâm, hoặc cách dùng sự im lặng của nó để dằn mặt đồng nghiệp to6.</td><td><span style='background: #def7ec; color: #03543f; padding: 4px 8px; border-radius: 12px; font-weight: bold;'>998</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr>
+            </table>
+        </div>
+
+        <div id="tab-customers" class="tab-pane">
+            <h2 style="margin-top:0;">Danh sách Khách Tự Động Load</h2>
+            <table>
+                <tr><th>ID</th><th>Tên</th><th>SĐT</th><th>Zalo</th><th>Ngày ĐK</th><th>Hành động</th></tr>
+                <tr><td>#5</td><td>makeitrealbae@gmail.com</td><td>None</td><td>None</td><td>05/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#6</td><td>hidahaynoi@gmail.com</td><td>None</td><td>None</td><td>05/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#7</td><td>hannguyeen@gmail.com</td><td>None</td><td>None</td><td>06/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#8</td><td>nganltmcs181947@fpt.edu.vn</td><td>None</td><td>None</td><td>06/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#9</td><td>Chiba</td><td>922999999</td><td>922999999</td><td>08/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#10</td><td>Minh Ha</td><td>977235678</td><td>977235678</td><td>08/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#11</td><td>Kong</td><td>352678899</td><td>352678899</td><td>08/04/2026</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#12</td><td>Kiên Hoa</td><td>099999999</td><td>099999999</td><td>2026-04-12</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#13</td><td>Sen Sen</td><td>0352097063</td><td>0352097063</td><td>2026-04-12</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>#14</td><td>Trần Văn</td><td>0979979779</td><td>0979979779</td><td>2026-04-12</td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr>
+            </table>
+        </div>
+
+        <div id="tab-orders" class="tab-pane">
+            <h2 style="margin-top:0;">Danh sách Đơn Hàng</h2>
+            <table>
+                <tr><th>Khách Hàng</th><th>Sản Phẩm</th><th>Số Tiền</th><th>Ngày</th><th>Trạng Thái</th><th>Hành động</th></tr>
+                <tr><td>Trần Văn</td><td>Ebook Cẩm Nang Pet Đá</td><td style='color:#10b981; font-weight:bold;'>19,000đ</td><td>2026-04-12T12:11:20.096213</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Chờ thanh toán</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Sen Sen</td><td>Ebook Cẩm Nang Pet Đá</td><td style='color:#10b981; font-weight:bold;'>19,000đ</td><td>2026-04-12T12:10:35.957569</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Đã thanh toán (Sepay)</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Sen Sen</td><td>Ebook Cẩm Nang Pet Đá</td><td style='color:#10b981; font-weight:bold;'>19,000đ</td><td>2026-04-12</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Đã thanh toán</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Sen Sen</td><td>Ebook Cẩm Nang Pet Đá</td><td style='color:#10b981; font-weight:bold;'>19,000đ</td><td>2026-04-12T12:05:33.801306</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Chờ thanh toán</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Sen Sen</td><td>Ebook Cẩm Nang Pet Đá</td><td style='color:#10b981; font-weight:bold;'>19,000đ</td><td>2026-04-12T12:03:35.487982</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Chờ thanh toán</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Kiên Hoa</td><td>Ebook Cẩm Nang Pet Đá</td><td style='color:#10b981; font-weight:bold;'>19,000đ</td><td>2026-04-12T12:03:30.332811</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Chờ thanh toán</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr><tr><td>Chiba</td><td>Đá Cưng</td><td style='color:#10b981; font-weight:bold;'>79,000đ</td><td>2026-04-11</td><td><span class='status-badge' style='background:#def7ec; color:#03543f;'>Đã thanh toán</span></td><td><button class='btn' disabled>Xóa (Demo)</button></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.sidebar a').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - CRM</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f4f7f6; }
+        .sidebar { width: 220px; background: #2c3e50; color: white; position: fixed; height: 100%; padding-top: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1);}
+        .sidebar h3 { text-align: center; margin-bottom: 30px; letter-spacing: 1px;}
+        .sidebar a { display: block; padding: 15px 20px; color: #ecf0f1; text-decoration: none; font-size: 1.05rem; border-left: 4px solid transparent; transition: all 0.3s;}
+        .sidebar a:hover, .sidebar a.active { background: #34495e; border-left-color: #3498db; color: white;}
+        .content { margin-left: 220px; padding: 30px; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;}
+        th, td { padding: 15px; border-bottom: 1px solid #edf2f7; text-align: left; }
+        th { background: #f8fafc; color: #4a5568; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;}
+        tr:hover { background-color: #f8fafc; }
+        
+        .btn { padding: 8px 12px; background: #e74c3c; color: white; text-decoration: none; border-radius: 6px; border: none; cursor: pointer; font-size: 0.9rem; transition: background 0.2s;}
+        .btn:hover { background: #c0392b; }
+        .btn-add { background: #10b981; padding: 10px 20px; font-weight: bold; width: auto; margin-top: 10px;}
+        .btn-add:hover { background: #059669; }
+        
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px;}
+        .card h3 { margin-top: 0; color: #2d3748; margin-bottom: 20px;}
+        
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+        input, select { padding: 10px 15px; width: 100%; box-sizing: border-box; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.95rem;}
+        input:focus, select:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
+        
+        .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; background: #e2e8f0; color: #4a5568; display: inline-block; text-align: center; line-height: 1.4;}
+        .status-success { background: #def7ec; color: #03543f; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-cancelled { background: #fde8e8; color: #9b1c1c; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>⚡ CRM ADMIN</h3>
+        <a href="?tab=products" class="{% if tab == 'products' %}active{% endif %}">📦 Sản Phẩm</a>
+        <a href="?tab=customers" class="{% if tab == 'customers' %}active{% endif %}">👥 Khách Hàng</a>
+        <a href="?tab=orders" class="{% if tab == 'orders' %}active{% endif %}">🛒 Đơn Hàng</a>
+    </div>
+
+    <div class="content">
+        {% if tab == 'products' %}
+        <h2 style="color: #2d3748; margin-top:0;">Quản lý Sản Phẩm</h2>
+        <div class="card">
+            <h3>Thêm Sản Phẩm Mới</h3>
+            <form action="/admin/product/add" method="POST">
+                <input type="text" name="name" placeholder="Tên sản phẩm" required>
+                <input type="number" name="price" placeholder="Giá bán (VNĐ)" required>
+                <input type="text" name="description" placeholder="Mô tả ngắn" class="full-width">
+                <input type="number" name="stock" placeholder="Số lượng trong kho" required>
+                <div></div>
+                <button type="submit" class="btn btn-add">Thêm sản phẩm</button>
+            </form>
+        </div>
+        <table>
+            <tr><th>Tên Sản Phẩm</th><th>Giá</th><th>Mô tả</th><th>Tồn kho</th><th>Hành động</th></tr>
+            {% for p in products %}
+            <tr>
+                <td style="font-weight: 500;">{{ p.name }}</td>
+                <td>{{ "{:,.0f}".format(p.price) }}đ</td>
+                <td style="color: #718096;">{{ p.description }}</td>
+                <td><span style="background: {% if p.stock > 0 %}#def7ec; color:#03543f{% else %}#fde8e8; color:#9b1c1c{% endif %}; padding: 4px 8px; border-radius: 12px; font-weight: bold;">{{ p.stock }}</span></td>
+                <td><a href="/admin/product/delete/{{ p.id }}" class="btn">Xóa</a></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" style="text-align:center; padding: 30px; color: #a0aec0;">Chưa có sản phẩm nào. Hãy thêm một sản phẩm!</td></tr>
+            {% endfor %}
+        </table>
+
+        {% elif tab == 'customers' %}
+        <h2 style="color: #2d3748; margin-top:0;">Quản lý Khách Hàng</h2>
+        <div class="card">
+            <h3>Thêm Khách Hàng Thủ Công</h3>
+            <form action="/admin/customer/add" method="POST">
+                <input type="text" name="name" placeholder="Tên khách hàng" required>
+                <input type="text" name="phone" placeholder="Số điện thoại" required>
+                <input type="text" name="zalo" placeholder="Zalo (nếu có)">
+                <input type="date" name="date" required>
+                <div class="full-width"><button type="submit" class="btn btn-add">Thêm dữ liệu</button></div>
+            </form>
+            <script>document.querySelector('input[name="date"]').valueAsDate = new Date();</script>
+        </div>
+        <table>
+            <tr><th>KH</th><th>Tên</th><th>Điện Thoại</th><th>Zalo</th><th>Ngày ĐK</th><th>Hành động</th></tr>
+            {% for c in customers %}
+            <tr>
+                <td>#{{ c.id }}</td>
+                <td style="font-weight: 500;">{{ c.name }}</td><td>{{ c.phone_number }}</td><td>{{ c.zalo }}</td>
+                <td style="color: #718096;">{{ c.registration_date.split('T')[0] if 'T' in c.registration_date else c.registration_date }}</td>
+                <td><a href="/admin/customer/delete/{{ c.id }}" class="btn">Xóa</a></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center; padding: 30px; color: #a0aec0;">Chưa có khách hàng nào.</td></tr>
+            {% endfor %}
+        </table>
+
+        {% elif tab == 'orders' %}
+        <h2 style="color: #2d3748; margin-top:0;">Quản lý Đơn Hàng</h2>
+        <div class="card">
+            <h3>Tạo Đơn Hàng Mới</h3>
+            <form action="/admin/order/add" method="POST">
+                <select name="customer_id" required>
+                    <option value="">-- Chọn Khách Hàng --</option>
+                    {% for c in customers %}
+                    <option value="{{ c.id }}">{{ c.name }} {{ '(' + c.phone_number + ')' if c.phone_number else '' }}</option>
+                    {% endfor %}
+                </select>
+                <select name="product_id" required>
+                    <option value="">-- Chọn Sản Phẩm --</option>
+                    {% for p in products %}
+                    <option value="{{ p.id }}">{{ p.name }} (Kho: {{ p.stock }}) - {{ "{:,.0f}".format(p.price) }}đ</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="amount" placeholder="Tổng tiền khách đã trả (VNĐ)" required>
+                <select name="status" required>
+                    <option value="pending" selected>⏳ Chờ xử lý</option>
+                    <option value="success">✅ Thành công</option>
+                    <option value="cancelled">❌ Đã hủy</option>
+                </select>
+                <input type="date" name="order_date" required>
+                <div></div>
+                <div class="full-width"><button type="submit" class="btn btn-add">Tạo đơn (Sẽ tự động trừ kho)</button></div>
+            </form>
+            <script>document.querySelector('input[name="order_date"]').valueAsDate = new Date();</script>
+        </div>
+        <table>
+            <tr><th>Khách Hàng</th><th>Sản Phẩm</th><th>Số Tiền</th><th>Ngày</th><th>Trạng Thái</th><th>Hành động</th></tr>
+            {% for o in orders %}
+            <tr>
+                <td style="font-weight: 500;">{{ o.customer_name }}</td>
+                <td>{{ o.product_name }}</td>
+                <td style="color: #10b981; font-weight: bold;">{{ "{:,.0f}".format(o.amount) }}đ</td>
+                <td>{{ o.order_date }}</td>
+                <td>
+                    <span class="status-badge {% if o.status == 'success' %}status-success{% elif o.status == 'cancelled' %}status-cancelled{% else %}status-pending{% endif %}">
+                        {{ '✅ Thành công' if o.status == 'success' else '❌ Đã hủy' if o.status == 'cancelled' else '⏳ Chờ xử lý' }}
+                        <br><small style="font-weight:normal;">({{ 'Thủ công' if o.payment_method == 'manual' else 'Tự động' }})</small>
+                    </span>
+                </td>
+                <td>
+                    <form action="/admin/order/update/{{ o.id }}" method="POST" style="margin-bottom:5px;" onsubmit="return confirm('Xác nhận Cập nhật Trạng thái? (Chú ý: Hủy đơn sẽ hoàn lại 1 sản phẩm vào kho)');">
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <select name="status" style="padding:4px; font-size: 0.8rem; min-width: 100px; margin: 0;">
+                                <option value="pending" {% if o.status == 'pending' %}selected{% endif %}>⏳ Chờ xử lý</option>
+                                <option value="success" {% if o.status == 'success' %}selected{% endif %}>✅ Thành công</option>
+                                <option value="cancelled" {% if o.status == 'cancelled' %}selected{% endif %}>❌ Đã hủy</option>
+                            </select>
+                            <button type="submit" style="padding:4px 8px; font-size:0.8rem; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;" title="Lưu lại">Lưu</button>
+                        </div>
+                    </form>
+                    <a href="/admin/order/delete/{{ o.id }}" class="btn" style="padding:4px 8px; font-size:0.8rem; background:#e2e8f0; color:#4a5568;" onclick="return confirm('Bạn có chắc xoá Đơn hàng này vĩnh viễn?');">Xóa Khỏi Data</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center; padding: 30px; color: #a0aec0;">Chưa có đơn hàng nào cả.</td></tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</body>
+</html>
