@@ -125,11 +125,12 @@ def add_order():
     }
     supabase_insert('orders', data)
     
-    # Trừ kho
-    prod = supabase_get('products', f'id=eq.{product_id}')
-    if prod and isinstance(prod, list) and len(prod) > 0:
-        current_stock = int(prod[0].get('stock', 0))
-        supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
+    # Trừ kho NẾU tạo đơn thành công
+    if data['status'] == 'success':
+        prod = supabase_get('products', f'id=eq.{product_id}')
+        if prod and isinstance(prod, list) and len(prod) > 0:
+            current_stock = int(prod[0].get('stock', 0))
+            supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
         
     return redirect(url_for('admin', tab='orders'))
 
@@ -146,14 +147,14 @@ def update_order(id):
         
         supabase_update('orders', 'id', id, {"status": status, "payment_method": "manual"})
         
-        # Xử lý kho khi huỷ / đổi từ trạng thái huỷ lại bình thường
+        # Xử lý kho theo logic: Chỉ 'success' mới bị trừ kho
         prod = supabase_get('products', f'id=eq.{product_id}')
         if prod and isinstance(prod, list) and len(prod) > 0:
             current_stock = int(prod[0].get('stock', 0))
-            if status == 'cancelled' and old_status != 'cancelled':
-                supabase_update('products', 'id', product_id, {"stock": current_stock + 1})
-            if status != 'cancelled' and old_status == 'cancelled':
+            if status == 'success' and old_status != 'success':
                 supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
+            elif status != 'success' and old_status == 'success':
+                supabase_update('products', 'id', product_id, {"stock": current_stock + 1})
                 
     return redirect(url_for('admin', tab='orders'))
 
@@ -231,6 +232,13 @@ def webhook_sepay():
             desc = f"PETDA{order['id']}"
             if desc in payload_str:
                 supabase_update('orders', 'id', order['id'], {"status": "success", "payment_method": "auto"})
+                
+                # Trừ kho cập nhật
+                prod = supabase_get('products', f"id=eq.{order['product_id']}")
+                if prod and isinstance(prod, list) and len(prod) > 0:
+                    current_stock = int(prod[0].get('stock', 0))
+                    supabase_update('products', 'id', order['product_id'], {"stock": current_stock - 1})
+                
                 print(f">>> WEBHOOK: Đã nhận tiền và cập nhật đơn {order['id']}")
                 return jsonify({"success": True, "message": "Ghi nhận thành công"})
                 
