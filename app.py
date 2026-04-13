@@ -194,16 +194,34 @@ def add_order():
     if cust and len(cust) > 0:
         target_email = cust[0].get('email')
         if target_email:
-            subject = f"🛒 Xác nhận đơn hàng mới - Pet Đá Vô Tri"
+            subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
             prod_name = supabase_get('products', f"id=eq.{product_id}")[0].get('name') if product_id else 'Sản phẩm Pet Đá'
+            amount_formatted = "{:,.0f}".format(float(data['amount']))
+            status_text = "Đã thanh toán ✅" if data['status'] == 'success' else "Chờ thanh toán ⏳"
+            
             content = f"""
-            <h3>Chào {cust[0].get('name')},</h3>
-            <p>Đơn hàng của bạn đã được khởi tạo thành công trên hệ thống!</p>
-            <p><b>Sản phẩm:</b> {prod_name}</p>
-            <p><b>Trạng thái:</b> {data['status']}</p>
-            <p>Cảm ơn bạn đã tin tưởng đón một bé đá 'vô tri' về đội của mình.</p>
-            <br>
-            <p>Thân ái,<br><b>Team Pet Đá</b></p>
+            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+                <h3>Chào {cust[0].get('name')},</h3>
+                <p>Nghe đồn bạn vừa quyết định đón một bé <b>{prod_name}</b> về đúng không? Chúc mừng bạn nha, từ nay bàn làm việc của bạn sẽ có một thành viên mới "ngoan" nhất thế giới: Bao chửi, bao ngồi im, bao nghe than vãn mà không bao giờ mách lẻo với sếp.</p>
+                
+                <div style="background: #f4f7f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <p><b>Thông tin đơn của bạn nè:</b></p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>📦 <b>Sản phẩm:</b> {prod_name}</li>
+                        <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
+                        <li>⚡ <b>Trạng thái:</b> {status_text}</li>
+                    </ul>
+                </div>
+
+                <p><b>🚚 Hướng dẫn nhận hàng:</b></p>
+                <p>Bé đá đang được mình "tắm rửa" sạch sẽ, đóng gói cực kỳ cẩn thận vào hộp xịn, đính thêm cả Giấy Khai Sinh viết tay nữa. Bạn chỉ cần giữ điện thoại, khi nào shipper bốc máy gọi thì bay ra nhận là xong. Nhớ lúc khui hộp phải nhẹ tay kẻo ẻm giật mình nha!</p>
+                
+                <p>Cảm ơn bạn đã ủng hộ một khởi nghiệp vô tri như mình. Hy vọng bé đá sẽ giúp bạn "tịnh tâm" bước qua mùa deadline này.</p>
+                
+                <br>
+                <p>Thân ái (và quyết thắng deadline),<br>
+                <b>Team Pet Đá</b></p>
+            </div>
             """
             send_email(target_email, subject, content)
         
