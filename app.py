@@ -205,21 +205,22 @@ def add_order():
                     <p>Chúc mừng bạn đã chính thức sở hữu <b>{prod_name}</b> - cuốn "tài liệu mật" chuyên trị các triệu chứng stress, hụt hơi vì deadline và các pha "khó đỡ" từ đồng nghiệp.</p>
                     
                     <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 5px solid #4f46e5;">
-                        <p><b>Chi tiết đơn của bạn:</b></p>
+                        <p><b>💾 Dữ liệu bí mật bạn vừa bốc:</b></p>
                         <ul style="list-style: none; padding: 0;">
-                            <li>📖 <b>Sản phẩm:</b> {prod_name}</li>
-                            <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
+                            <li>📖 <b>Tri thức:</b> {prod_name}</li>
+                            <li>💰 <b>Khoản đầu tư:</b> {amount_formatted}đ</li>
+                            <li>⚡ <b>Trạng thái:</b> {status_text}</li>
                         </ul>
                     </div>
 
-                    <p><b>🚚 Hướng dẫn nhận 'bí kíp':</b></p>
-                    <p>Vì đây là sản phẩm tâm linh kỹ thuật số, bạn không cần phải đứng cửa chờ shipper đâu. Bạn có thể nhấn vào link dưới đây để đọc ngay và luôn:</p>
+                    <p><b>📧 Cách thức 'giác ngộ' (Không cần shipper):</b></p>
+                    <p>Vì đây là "hàng tâm linh hệ số", bạn hông cần đứng cửa ngóng shipper làm gì cho mỏi chân. Bí kíp đã được số hóa và sẵn sàng để bạn "luyện công" ngay lập tức. Click vào cái nút xanh dưới đây để mở ra chân trời mới:</p>
                     <p style="text-align: center; margin: 30px 0;">
-                        <a href="https://bit.ly/cam-nang-pet-da" style="background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">👉 TẢI EBOOK TẠI ĐÂY</a>
+                        <a href="https://bit.ly/cam-nang-pet-da" style="background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">👉 MỞ BÍ KÍP NGAY</a>
                     </p>
-                    <p><i>*(Nhớ lưu về máy để mỗi lần bị sếp dí là mở ra đọc cho "tịnh tâm" nhé!)*</i></p>
+                    <p><i>*(Nhớ lưu về máy để mỗi lần bị sếp đi ngang là giả vờ đang "check tài liệu quan trọng" nhé!)*</i></p>
                     
-                    <p>Cảm ơn bạn đã ủng hộ tinh thần vô tri của team. Hy vọng cuốn sách này sẽ giúp bạn sống sót qua 1001 kiếp nạn công sở.</p>
+                    <p>Cảm ơn bạn đã tin tưởng ủng hộ tinh thần vô tri của team. Hy vọng cuốn sách này sẽ giúp bạn sống sót qua 1001 kiếp nạn công sở.</p>
                     
                     <br>
                     <p>Thân ái (và chúc bạn sớm thành chánh quả),<br>
