@@ -153,8 +153,8 @@
                 const response = await fetch(`/api/check_order/${currentOrderId}`);
                 const result = await response.json();
                 
-                // Trạng thái 'Đã thanh toán' trong SQLite
-                if (result.status && result.status.includes('thanh toán')) {
+                // Trạng thái 'success' đồng bộ với Backend
+                if (result.status === 'success') {
                     clearInterval(pollInterval);
                     document.getElementById('step2-qr').style.display = 'none';
                     document.getElementById('step3-success').style.display = 'block';

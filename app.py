@@ -6,6 +6,7 @@ import os
 import resend
 import threading
 import time
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -194,71 +195,35 @@ def add_order():
     if cust and len(cust) > 0:
         target_email = cust[0].get('email')
         if target_email:
+            subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
             prod_name = supabase_get('products', f"id=eq.{product_id}")[0].get('name') if product_id else 'Sản phẩm Pet Đá'
             amount_formatted = "{:,.0f}".format(float(data['amount']))
             status_text = "Đã thanh toán ✅" if data['status'] == 'success' else "Chờ thanh toán ⏳"
             
-            # PHÂN LOẠI EMAIL THEO SẢN PHẨM (EBOOK VS BÉ ĐÁ)
-            if "Ebook" in prod_name:
-                subject = f"📚 [BÍ KÍP] {prod_name} đã tới! Mở ra để 'giác ngộ' ngay nè bạn ơi"
-                ebook_url = "https://drive.google.com/file/d/1_K66ezErQM3ystWncMQmPgbA-BP5FYYW/view?usp=sharing"
-                content = f"""
-                <div style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
-                    <h3 style="color: #4f46e5;">Chào {cust[0].get('name')},</h3>
-                    <p>Chúc mừng bạn đã chính thức sở hữu <b>{prod_name}</b> - cuốn "tài liệu mật" chuyên trị các triệu chứng stress, hụt hơi vì deadline và các pha "khó đỡ" từ đồng nghiệp.</p>
-                    
-                    <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <p style="margin-top:0;">📋 <b>Dữ liệu bí mật bạn vừa bốc:</b></p>
-                        <ul style="list-style: none; padding: 0;">
-                            <li>📖 <b>Tri thức:</b> {prod_name}</li>
-                            <li>💰 <b>Khoản đầu tư:</b> {amount_formatted}đ</li>
-                            <li>⚡ <b>Trạng thái:</b> {status_text}</li>
-                        </ul>
-                    </div>
-
-                    <p><b>✨ Cách thức "giác ngộ" (Không cần shipper):</b></p>
-                    <p>Vì đây là "hàng tâm linh hệ số", bạn hổng cần đứng cửa ngóng shipper làm gì cho mỏi chân. Bí kíp đã được số hóa và sẵn sàng để bạn "luyện công" ngay lập tức. Click vào cái nút dưới đây để mở ra chân trời mới:</p>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="{ebook_url}" style="background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">👉 MỞ BÍ KÍP NGAY</a>
-                    </div>
-
-                    <p style="font-size: 0.9rem; font-style: italic; color: #666;">*(Nhớ lưu về máy để mỗi lần bị sếp đi ngang là giả vờ đang "check tài liệu quan trọng" nha!)*</p>
-                    
-                    <p>Cảm ơn bạn đã tin tưởng ủng hộ tinh thần vô tri của team. Hy vọng cuốn sách này sẽ giúp bạn sống sót qua 1001 kiếp nạn công sở.</p>
-                    
-                    <br>
-                    <p>Thân ái (và chúc bạn sớm thành chánh quả),<br>
-                    <b>Team Pet Đá</b></p>
+            content = f"""
+            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+                <h3>Chào {cust[0].get('name')},</h3>
+                <p>Nghe đồn bạn vừa quyết định đón một bé <b>{prod_name}</b> về đúng không? Chúc mừng bạn nha, từ nay bàn làm việc của bạn sẽ có một thành viên mới "ngoan" nhất thế giới: Bao chửi, bao ngồi im, bao nghe than vãn mà không bao giờ mách lẻo với sếp.</p>
+                
+                <div style="background: #f4f7f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <p><b>Thông tin đơn của bạn nè:</b></p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>📦 <b>Sản phẩm:</b> {prod_name}</li>
+                        <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
+                        <li>⚡ <b>Trạng thái:</b> {status_text}</li>
+                    </ul>
                 </div>
-                """
-            else:
-                # Mẫu cho Bé Đá Vật Lý
-                subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
-                content = f"""
-                <div style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
-                    <h3>Chào {cust[0].get('name')},</h3>
-                    <p>Nghe đồn bạn vừa quyết định đón một bé <b>{prod_name}</b> về đúng không? Chúc mừng bạn nha, từ nay bàn làm việc của bạn sẽ có một thành viên mới "ngoan" nhất thế giới: Bao chửi, bao ngồi im, bao nghe than vãn mà không bao giờ mách lẻo với sếp.</p>
-                    
-                    <div style="background: #f4f7f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <p style="margin-top:0;"><b>Thông tin đơn của bạn nè:</b></p>
-                        <ul style="list-style: none; padding: 0;">
-                            <li>📦 <b>Sản phẩm:</b> {prod_name}</li>
-                            <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
-                            <li>⚡ <b>Trạng thái:</b> {status_text}</li>
-                        </ul>
-                    </div>
 
-                    <p><b>🚚 Hướng dẫn nhận hàng:</b></p>
-                    <p>Bé đá đang được mình "tắm rửa" sạch sẽ, đóng gói cực kỳ cẩn thận vào hộp xịn, đính thêm cả Giấy Khai Sinh viết tay nữa. Bạn chỉ cần giữ điện thoại, khi nào shipper bốc máy gọi thì bay ra nhận là xong. Nhớ lúc khui hộp phải nhẹ tay kẻo ẻm giật mình nha!</p>
-                    
-                    <p>Cảm ơn bạn đã ủng hộ một khởi nghiệp vô tri như mình. Hy vọng bé đá sẽ giúp bạn "tịnh tâm" bước qua mùa deadline này.</p>
-                    
-                    <br>
-                    <p>Thân ái (và quyết thắng deadline),<br>
-                    <b>Team Pet Đá</b></p>
-                </div>
-                """
+                <p><b>🚚 Hướng dẫn nhận hàng:</b></p>
+                <p>Bé đá đang được mình "tắm rửa" sạch sẽ, đóng gói cực kỳ cẩn thận vào hộp xịn, đính thêm cả Giấy Khai Sinh viết tay nữa. Bạn chỉ cần giữ điện thoại, khi nào shipper bốc máy gọi thì bay ra nhận là xong. Nhớ lúc khui hộp phải nhẹ tay kẻo ẻm giật mình nha!</p>
+                
+                <p>Cảm ơn bạn đã ủng hộ một khởi nghiệp vô tri như mình. Hy vọng bé đá sẽ giúp bạn "tịnh tâm" bước qua mùa deadline này.</p>
+                
+                <br>
+                <p>Thân ái (và quyết thắng deadline),<br>
+                <b>Team Pet Đá</b></p>
+            </div>
+            """
             send_email(target_email, subject, content)
         
     return redirect(url_for('admin', tab='orders'))
@@ -354,25 +319,44 @@ def check_order(id):
 @app.route('/api/webhook/sepay', methods=['POST'])
 def webhook_sepay():
     payload = request.json or {}
+    print(f"\n>>> [SEPAY WEBHOOK] Nhận dữ liệu: {payload}")
+    
+    # Chuyển payload sang chuỗi hoa để tìm kiếm linh hoạt
     payload_str = str(payload).upper()
     
-    pending_orders = supabase_get('orders', 'status=eq.pending')
-    if isinstance(pending_orders, list):
-        for order in pending_orders:
-            desc = f"PETDA{order['id']}"
-            if desc in payload_str:
-                supabase_update('orders', 'id', order['id'], {"status": "success", "payment_method": "auto"})
+    # Tìm mã PETDA{id} - Ưu tiên tìm pattern PETDA + Số
+    match = re.search(r'PETDA(\d+)', payload_str)
+    
+    if match:
+        order_id = int(match.group(1))
+        print(f">>> [SEPAY WEBHOOK] Phát hiện mã đơn hàng: {order_id}")
+        
+        # Kiểm tra đơn hàng này trong DB
+        order = supabase_get('orders', f'id=eq.{order_id}')
+        if order and isinstance(order, list) and len(order) > 0:
+            order_data = order[0]
+            
+            if order_data.get('status') == 'pending':
+                # CẬP NHẬT TRẠNG THÁI SUCCESS
+                supabase_update('orders', 'id', order_id, {"status": "success", "payment_method": "auto"})
                 
-                # Trừ kho cập nhật
-                prod = supabase_get('products', f"id=eq.{order['product_id']}")
+                # Trừ kho
+                product_id = order_data.get('product_id')
+                prod = supabase_get('products', f"id=eq.{product_id}")
                 if prod and isinstance(prod, list) and len(prod) > 0:
                     current_stock = int(prod[0].get('stock', 0))
-                    supabase_update('products', 'id', order['product_id'], {"stock": current_stock - 1})
+                    supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
                 
-                print(f">>> WEBHOOK: Đã nhận tiền và cập nhật đơn {order['id']}")
-                return jsonify({"success": True, "message": "Ghi nhận thành công"})
-                
-    print(">>> WEBHOOK: Không khớp đơn hàng pending nào. Nội dung:", payload_str)
+                print(f">>> [SEPAY WEBHOOK] CHÚC MỪNG: Đơn {order_id} đã thanh toán thành công!")
+                return jsonify({"success": True, "message": f"Order {order_id} updated to success"})
+            else:
+                print(f">>> [SEPAY WEBHOOK] Bỏ qua: Đơn {order_id} đã ở trạng thái {order_data.get('status')}")
+                return jsonify({"success": True, "message": "Already processed"})
+        else:
+            print(f">>> [SEPAY WEBHOOK] LỖI: Không tìm thấy đơn {order_id} trong database.")
+    else:
+        print(">>> [SEPAY WEBHOOK] Không tìm thấy mã PETDA trong nội dung chuyển khoản.")
+        
     return jsonify({"success": True, "message": "Ignored"})
 
 @app.route('/admin/resend-test')
