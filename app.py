@@ -3,6 +3,9 @@ from flask_cors import CORS
 from datetime import datetime
 import requests
 import os
+import resend
+import threading
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -42,6 +45,36 @@ def supabase_update(table, match_col, match_val, data):
 def supabase_delete(table, match_col, match_val):
     url = f"{SUPABASE_URL}/rest/v1/{table}?{match_col}=eq.{match_val}"
     requests.delete(url, headers=headers)
+
+# ==========================================
+# CẤU HÌNH RESEND EMAIL
+# ==========================================
+def load_resend_key():
+    try:
+        with open('resend_config.txt', 'r') as f:
+            return f.read().strip()
+    except:
+        return None
+
+resend.api_key = load_resend_key()
+
+def send_email(to_email, subject, html_content):
+    if not resend.api_key:
+        print(">>> LỖI: Chưa cấu hình Resend API Key")
+        return False
+    try:
+        params = {
+            "from": "onboarding@resend.dev", # Dùng email mặc định của Resend
+            "to": [to_email],
+            "subject": subject,
+            "html": html_content,
+        }
+        resend.Emails.send(params)
+        print(f">>> Đã gửi email tới: {to_email}")
+        return True
+    except Exception as e:
+        print(f">>> LỖI gửi email: {str(e)}")
+        return False
 
 # ==========================================
 # ROUTES CƠ BẢN
@@ -247,6 +280,72 @@ def webhook_sepay():
     print(">>> WEBHOOK: Không khớp đơn hàng pending nào. Nội dung:", payload_str)
     return jsonify({"success": True, "message": "Ignored"})
 
+# ==========================================
+# EMAIL SEQUENCE LOGIC
+# ==========================================
+EMAIL_TEMPLATES = {
+    "welcome": {
+        "subject": "🎉 Chào mừng bạn gia nhập Hội Những Người Nuôi Đá Vô Tri!",
+        "content": """
+        <p>Chào bạn, chủ nhân tương lai!</p>
+        <p>Bạn vừa chính thức đặt một chân vào thế giới của sự tĩnh lặng tuyệt đối (mình nói thiệt á, nó hông kêu, hông sủa, hông đòi ăn, hông làm gì hết).</p>
+        <p>Cảm ơn bạn đã tin tưởng mình và "bé đá" tương lai. Trong vài ngày tới, mình sẽ kể cho bạn nghe tại sao hàng ngàn Gen Z lại chọn nuôi đá để giải nghiệp chốn công sở nhé.</p>
+        <p>Đừng quên kiểm tra inbox thường xuyên, mình có chuẩn bị vài điều "vô tri nhưng hữu ích" dành riêng cho bạn đó.</p>
+        <br>
+        <p>Thân ái,<br><b>Team Pet Đá</b></p>
+        """
+    },
+    "nurture": {
+        "subject": "🧘 Bí kíp 'Tịnh Tâm' 0đ ngay tại bàn làm việc",
+        "content": """
+        <p>Chào bạn,</p>
+        <p>Bạn đã bao giờ định chửi sếp nhưng rồi lại phải nuốt cục tức vào trong chưa? Hay bị dí deadline đến mức muốn hóa đá luôn cho rồi?</p>
+        <p>Bí quyết của những "con sen" hệ đá chính là: <b>Lôi bé đá ra chửi thẳng mặt.</b></p>
+        <p>Nó sẽ im lặng chịu trận 24/7, hông bao giờ mách lẻo, hông bao giờ phán xét. Đó là sự trị liệu tâm lý đỉnh cao mà không có con mèo hay con chó nào làm được.</p>
+        <p>Chỉ cần ngồi im lặng cùng nó 2 phút mỗi khi stress, bạn sẽ thấy deadline cũng chỉ là những hạt cát thôi.</p>
+        <br>
+        <p>Chúc bạn một ngày làm việc bớt nghiệp,<br><b>Team Pet Đá</b></p>
+        """
+    },
+    "sales": {
+        "subject": "🪨 Cơ hội đón 'Bé Đá Cưng' về dinh (Lô này chỉ còn vài bé!)",
+        "content": """
+        <p>Chào bạn,</p>
+        <p>Lô đá 'lỳ lợm' đợt này của mình đang vơi dần rồi, hiện tại chỉ còn vài bé Đá Cưng (79k) chờ được bế về thôi.</p>
+        <p>Tại sao bạn nên chốt ngay?</p>
+        <ul>
+            <li><b>Độc bản:</b> Mỗi bé là một vibe khác nhau.</li>
+            <li><b>An toàn:</b> Đóng gói cực sang chảnh, ship tới văn phòng ai cũng tưởng đồ hiệu.</li>
+            <li><b>Giá rẻ:</b> Chỉ bằng 2 ly trà đào, mà mua được một 'người lắng nghe' tận tụy cả đời.</li>
+        </ul>
+        <p>👉 <b><a href='https://ban-pet-da.onrender.com/checkout'>ĐẶT HÀNG TẠI ĐÂY</a></b></p>
+        <br>
+        <p>Hẹn gặp bạn và bé đá của bạn,<br><b>Team Pet Đá</b></p>
+        """
+    }
+}
+
+def trigger_email_sequence(email, name):
+    is_test = "+test" in email.lower()
+    
+    # Email 1: Welcome
+    send_email(email, EMAIL_TEMPLATES["welcome"]["subject"], EMAIL_TEMPLATES["welcome"]["content"])
+    
+    if is_test:
+        # Gửi luôn 2 email còn lại ngay lập tức
+        print(f">>> TEST MODE: Gửi toàn bộ sequence cho {email}")
+        send_email(email, EMAIL_TEMPLATES["nurture"]["subject"], EMAIL_TEMPLATES["nurture"]["content"])
+        send_email(email, EMAIL_TEMPLATES["sales"]["subject"], EMAIL_TEMPLATES["sales"]["content"])
+    else:
+        # Lên lịch gửi (Dùng Threading đơn giản cho bài tập này)
+        def delayed_nurture():
+            time.sleep(172800) # 2 ngày
+            send_email(email, EMAIL_TEMPLATES["nurture"]["subject"], EMAIL_TEMPLATES["nurture"]["content"])
+            time.sleep(86400) # 1 ngày sau đó
+            send_email(email, EMAIL_TEMPLATES["sales"]["subject"], EMAIL_TEMPLATES["sales"]["content"])
+            
+        threading.Thread(target=delayed_nurture).start()
+
 @app.route('/api/waitlist', methods=['POST'])
 def api_waitlist():
     data = request.json
@@ -259,13 +358,16 @@ def api_waitlist():
         return jsonify({"success": False, "message": "Thiếu thông tin"})
         
     date_str = datetime.now().isoformat()
-    # Kiểm tra xem khách đã tồn tại chưa
     cust = supabase_get('customers', f'phone_number=eq.{phone}')
+    
     if not cust or len(cust) == 0:
         supabase_insert('customers', {
             "name": name, "phone_number": phone, "email": email, "zalo": zalo, "registration_date": date_str
         })
-        return jsonify({"success": True, "message": "Đã thêm vào waitlist"})
+        # KÍCH HOẠT SEQUENCE
+        trigger_email_sequence(email, name)
+        return jsonify({"success": True, "message": "Đã thêm vào waitlist và gửi email chào mừng"})
+        
     return jsonify({"success": True, "message": "Khách đã tồn tại"})
 
 if __name__ == '__main__':
