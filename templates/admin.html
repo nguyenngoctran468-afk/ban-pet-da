@@ -40,6 +40,13 @@
         <a href="?tab=products" class="{% if tab == 'products' %}active{% endif %}">📦 Sản Phẩm</a>
         <a href="?tab=customers" class="{% if tab == 'customers' %}active{% endif %}">👥 Khách Hàng</a>
         <a href="?tab=orders" class="{% if tab == 'orders' %}active{% endif %}">🛒 Đơn Hàng</a>
+        <div style="padding: 20px; font-size: 0.8rem; border-top: 1px solid #34495e; margin-top: 20px;">
+            <p style="color: #95a5a6; margin-bottom: 5px;">Hệ thống Email:</p>
+            <span style="font-weight: bold; color: {% if '✅' in resend_stat %}#10b981{% else %}#e74c3c{% endif %};">{{ resend_stat }}</span>
+            {% if '✅' in resend_stat %}
+            <br><a href="/admin/resend-test" target="_blank" style="display:inline-block; margin-top:10px; padding:5px 10px; background:#3498db; color:white; border-radius:4px; font-size:0.75rem; text-decoration:none;">Bấm để Test Gửi Thử</a>
+            {% endif %}
+        </div>
     </div>
 
     <div class="content">

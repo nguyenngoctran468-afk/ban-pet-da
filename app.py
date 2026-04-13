@@ -115,7 +115,10 @@ def admin():
             o['product_name'] = o.get('products', {}).get('name', '') if o.get('products') else 'Chưa rõ'
             orders.append(o)
     
-    return render_template('admin.html', tab=tab, products=products, customers=customers, orders=orders)
+    # Kiểm tra trạng thái API Key để báo cho Admin
+    resend_stat = "Đã cấu hình ✅" if resend.api_key else "Chưa cấu hình ❌"
+    
+    return render_template('admin.html', tab=tab, products=products, customers=customers, orders=orders, resend_stat=resend_stat)
 
 # ------------- PRODUCTS -------------
 @app.route('/admin/product/add', methods=['POST'])
@@ -290,6 +293,18 @@ def webhook_sepay():
     print(">>> WEBHOOK: Không khớp đơn hàng pending nào. Nội dung:", payload_str)
     return jsonify({"success": True, "message": "Ignored"})
 
+@app.route('/admin/resend-test')
+def admin_resend_test():
+    test_email = "nguyenngoctran468@gmail.com" # Email chính chủ của bạn
+    subject = "🔔 TEST KẾT NỐI RESEND"
+    content = "<p>Nếu bạn thấy thư này, nghĩa là hệ thống đã kết nối Resend thành công!</p>"
+    
+    success = send_email(test_email, subject, content)
+    if success:
+        return f"<h3>Thành công! Hãy kiểm tra hộp thư {test_email}</h3><a href='/admin?tab=customers'>Quay lại Admin</a>"
+    else:
+        return f"<h3>Thất bại! Có lỗi xảy ra. Hãy kiểm tra Logs trên Render hoặc Environment Variables.</h3><p>Đã thử gửi tới: {test_email}</p><a href='/admin?tab=customers'>Quay lại Admin</a>"
+
 # ==========================================
 # EMAIL SEQUENCE LOGIC
 # ==========================================
@@ -374,11 +389,10 @@ def api_waitlist():
         supabase_insert('customers', {
             "name": name, "phone_number": phone, "email": email, "zalo": zalo, "registration_date": date_str
         })
-        # KÍCH HOẠT SEQUENCE
-        trigger_email_sequence(email, name)
-        return jsonify({"success": True, "message": "Đã thêm vào waitlist và gửi email chào mừng"})
-        
-    return jsonify({"success": True, "message": "Khách đã tồn tại"})
+    
+    # KÍCH HOẠT SEQUENCE TRONG MỌI TRƯỜNG HỢP KHI ĐIỀN FORM (ĐỂ TEST)
+    trigger_email_sequence(email, name)
+    return jsonify({"success": True, "message": "Đã ghi nhận và kích hoạt chuỗi email"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000, host='0.0.0.0')
