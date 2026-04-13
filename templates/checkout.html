@@ -63,6 +63,10 @@
                     <input type="text" id="phone" required placeholder="09xxxxxxx">
                 </div>
                 <div class="form-group">
+                    <label>Email nhận thông báo</label>
+                    <input type="email" id="email" required placeholder="example@gmail.com">
+                </div>
+                <div class="form-group">
                     <label>Sản phẩm</label>
                     <select id="productId" required>
                         <option value="">-- Chọn Sản Phẩm --</option>
@@ -153,6 +157,7 @@
             const data = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
                 product_id: document.getElementById('productId').value
             };
 
