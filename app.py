@@ -194,25 +194,21 @@ def add_order():
     if cust and len(cust) > 0:
         target_email = cust[0].get('email')
         if target_email:
-            subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
-            
-            # Lấy thông tin sản phẩm và định dạng dữ liệu
-            prod_info = supabase_get('products', f"id=eq.{product_id}")
-            prod_name = prod_info[0].get('name') if prod_info and len(prod_info) > 0 else 'Sản phẩm Pet Đá'
+            prod_name = supabase_get('products', f"id=eq.{product_id}")[0].get('name') if product_id else 'Sản phẩm Pet Đá'
             amount_formatted = "{:,.0f}".format(float(data['amount']))
             status_text = "Đã thanh toán ✅" if data['status'] == 'success' else "Chờ thanh toán ⏳"
             
-            is_ebook = "Ebook" in prod_name
-            
-            if is_ebook:
-                subject = f"📚 [BÍ KÍP] Cẩm Nang Pet Đá đã tới! Mở ra để 'giác ngộ' ngay nè bạn ơi"
+            # PHÂN LOẠI EMAIL THEO SẢN PHẨM (EBOOK VS BÉ ĐÁ)
+            if "Ebook" in prod_name:
+                subject = f"📚 [BÍ KÍP] {prod_name} đã tới! Mở ra để 'giác ngộ' ngay nè bạn ơi"
+                ebook_url = "https://drive.google.com/file/d/1_K66ezErQM3ystWncMQmPgbA-BP5FYYW/view?usp=sharing"
                 content = f"""
-                <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-                    <h3>Chào {cust[0].get('name')},</h3>
+                <div style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #4f46e5;">Chào {cust[0].get('name')},</h3>
                     <p>Chúc mừng bạn đã chính thức sở hữu <b>{prod_name}</b> - cuốn "tài liệu mật" chuyên trị các triệu chứng stress, hụt hơi vì deadline và các pha "khó đỡ" từ đồng nghiệp.</p>
                     
-                    <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 5px solid #4f46e5;">
-                        <p><b>💾 Dữ liệu bí mật bạn vừa bốc:</b></p>
+                    <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p style="margin-top:0;">📋 <b>Dữ liệu bí mật bạn vừa bốc:</b></p>
                         <ul style="list-style: none; padding: 0;">
                             <li>📖 <b>Tri thức:</b> {prod_name}</li>
                             <li>💰 <b>Khoản đầu tư:</b> {amount_formatted}đ</li>
@@ -220,12 +216,14 @@ def add_order():
                         </ul>
                     </div>
 
-                    <p><b>📧 Cách thức 'giác ngộ' (Không cần shipper):</b></p>
-                    <p>Vì đây là "hàng tâm linh hệ số", bạn hông cần đứng cửa ngóng shipper làm gì cho mỏi chân. Bí kíp đã được số hóa và sẵn sàng để bạn "luyện công" ngay lập tức. Click vào cái nút xanh dưới đây để mở ra chân trời mới:</p>
-                    <p style="text-align: center; margin: 30px 0;">
-                        <a href="https://bit.ly/cam-nang-pet-da" style="background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">👉 MỞ BÍ KÍP NGAY</a>
-                    </p>
-                    <p><i>*(Nhớ lưu về máy để mỗi lần bị sếp đi ngang là giả vờ đang "check tài liệu quan trọng" nhé!)*</i></p>
+                    <p><b>✨ Cách thức "giác ngộ" (Không cần shipper):</b></p>
+                    <p>Vì đây là "hàng tâm linh hệ số", bạn hổng cần đứng cửa ngóng shipper làm gì cho mỏi chân. Bí kíp đã được số hóa và sẵn sàng để bạn "luyện công" ngay lập tức. Click vào cái nút dưới đây để mở ra chân trời mới:</p>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="{ebook_url}" style="background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">👉 MỞ BÍ KÍP NGAY</a>
+                    </div>
+
+                    <p style="font-size: 0.9rem; font-style: italic; color: #666;">*(Nhớ lưu về máy để mỗi lần bị sếp đi ngang là giả vờ đang "check tài liệu quan trọng" nha!)*</p>
                     
                     <p>Cảm ơn bạn đã tin tưởng ủng hộ tinh thần vô tri của team. Hy vọng cuốn sách này sẽ giúp bạn sống sót qua 1001 kiếp nạn công sở.</p>
                     
@@ -235,13 +233,15 @@ def add_order():
                 </div>
                 """
             else:
+                # Mẫu cho Bé Đá Vật Lý
+                subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
                 content = f"""
-                <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+                <div style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
                     <h3>Chào {cust[0].get('name')},</h3>
                     <p>Nghe đồn bạn vừa quyết định đón một bé <b>{prod_name}</b> về đúng không? Chúc mừng bạn nha, từ nay bàn làm việc của bạn sẽ có một thành viên mới "ngoan" nhất thế giới: Bao chửi, bao ngồi im, bao nghe than vãn mà không bao giờ mách lẻo với sếp.</p>
                     
                     <div style="background: #f4f7f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <p><b>Thông tin đơn của bạn nè:</b></p>
+                        <p style="margin-top:0;"><b>Thông tin đơn của bạn nè:</b></p>
                         <ul style="list-style: none; padding: 0;">
                             <li>📦 <b>Sản phẩm:</b> {prod_name}</li>
                             <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
