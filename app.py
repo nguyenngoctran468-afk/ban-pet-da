@@ -405,13 +405,20 @@ def api_waitlist():
     cust = supabase_get('customers', f'phone_number=eq.{phone}')
     
     if not cust or len(cust) == 0:
+        # Nếu chưa có khách -> Thêm mới
         supabase_insert('customers', {
             "name": name, "phone_number": phone, "email": email, "zalo": zalo, "registration_date": date_str
         })
+        msg = "Đã thêm khách hàng mới và kích hoạt chuỗi email"
+    else:
+        # Nếu đã có -> Cập nhật email và tên mới nhất (để bạn thấy update trong Admin)
+        customer_id = cust[0]['id']
+        supabase_update('customers', 'id', customer_id, {"email": email, "name": name})
+        msg = "Đã cập nhật thông tin khách hàng và kích hoạt lại chuỗi email"
     
     # KÍCH HOẠT SEQUENCE TRONG MỌI TRƯỜNG HỢP KHI ĐIỀN FORM (ĐỂ TEST)
     trigger_email_sequence(email, name)
-    return jsonify({"success": True, "message": "Đã ghi nhận và kích hoạt chuỗi email"})
+    return jsonify({"success": True, "message": msg})
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000, host='0.0.0.0')
