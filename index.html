@@ -848,11 +848,12 @@
               email: formData.get('Email'),
               zalo: formData.get('So_Dien_Thoai')
             };
+            console.log("Sending to CRM:", crmData); // Debug log
             fetch('/api/waitlist', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(crmData)
-            });
+            }).then(r => r.json()).then(res => console.log("CRM Response:", res));
 
             surveyBtn.innerHTML = '🎉 CẢM ƠN BẠN! FORM ĐÃ GỬI';
             surveyBtn.style.backgroundColor = '#4CAF50';

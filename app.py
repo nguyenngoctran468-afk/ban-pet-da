@@ -178,6 +178,25 @@ def add_order():
         if prod and isinstance(prod, list) and len(prod) > 0:
             current_stock = int(prod[0].get('stock', 0))
             supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
+
+    # GỬI EMAIL XÁC NHẬN ĐƠN HÀNG (BƯỚC 6 TRONG SOP)
+    # Lấy thông tin khách hàng để lấy email
+    cust = supabase_get('customers', f"id=eq.{data['customer_id']}")
+    if cust and len(cust) > 0:
+        target_email = cust[0].get('email')
+        if target_email:
+            subject = f"🛒 Xác nhận đơn hàng mới - Pet Đá Vô Tri"
+            prod_name = supabase_get('products', f"id=eq.{product_id}")[0].get('name') if product_id else 'Sản phẩm Pet Đá'
+            content = f"""
+            <h3>Chào {cust[0].get('name')},</h3>
+            <p>Đơn hàng của bạn đã được khởi tạo thành công trên hệ thống!</p>
+            <p><b>Sản phẩm:</b> {prod_name}</p>
+            <p><b>Trạng thái:</b> {data['status']}</p>
+            <p>Cảm ơn bạn đã tin tưởng đón một bé đá 'vô tri' về đội của mình.</p>
+            <br>
+            <p>Thân ái,<br><b>Team Pet Đá</b></p>
+            """
+            send_email(target_email, subject, content)
         
     return redirect(url_for('admin', tab='orders'))
 
