@@ -195,6 +195,13 @@ def add_order():
         target_email = cust[0].get('email')
         if target_email:
             subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
+            
+            # Lấy thông tin sản phẩm và định dạng dữ liệu
+            prod_info = supabase_get('products', f"id=eq.{product_id}")
+            prod_name = prod_info[0].get('name') if prod_info and len(prod_info) > 0 else 'Sản phẩm Pet Đá'
+            amount_formatted = "{:,.0f}".format(float(data['amount']))
+            status_text = "Đã thanh toán ✅" if data['status'] == 'success' else "Chờ thanh toán ⏳"
+            
             is_ebook = "Ebook" in prod_name
             
             if is_ebook:
