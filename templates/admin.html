@@ -78,6 +78,7 @@
             <form action="/admin/customer/add" method="POST">
                 <input type="text" name="name" placeholder="Tên khách hàng" required>
                 <input type="text" name="phone" placeholder="Số điện thoại" required>
+                <input type="email" name="email" placeholder="Email" required>
                 <input type="text" name="zalo" placeholder="Zalo (nếu có)">
                 <input type="date" name="date" required>
                 <div class="full-width"><button type="submit" class="btn btn-add">Thêm dữ liệu</button></div>
@@ -85,11 +86,11 @@
             <script>document.querySelector('input[name="date"]').valueAsDate = new Date();</script>
         </div>
         <table>
-            <tr><th>KH</th><th>Tên</th><th>Điện Thoại</th><th>Zalo</th><th>Ngày ĐK</th><th>Hành động</th></tr>
+            <tr><th>KH</th><th>Tên</th><th>SĐT</th><th>Email</th><th>Zalo</th><th>Ngày ĐK</th><th>Hành động</th></tr>
             {% for c in customers %}
             <tr>
                 <td>#{{ c.id }}</td>
-                <td style="font-weight: 500;">{{ c.name }}</td><td>{{ c.phone_number }}</td><td>{{ c.zalo }}</td>
+                <td style="font-weight: 500;">{{ c.name }}</td><td>{{ c.phone_number }}</td><td><small>{{ c.email }}</small></td><td>{{ c.zalo }}</td>
                 <td style="color: #718096;">{{ c.registration_date.split('T')[0] if 'T' in c.registration_date else c.registration_date }}</td>
                 <td><a href="/admin/customer/delete/{{ c.id }}" class="btn">Xóa</a></td>
             </tr>

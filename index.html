@@ -512,13 +512,18 @@
         </div>
 
         <div class="question-block">
-          <label class="question-title">Câu 2: Số Zalo / điện thoại để mình liên hệ?</label>
-          <p class="question-note">(Không spam, chỉ nhắn khi có deal ngon)</p>
+          <label class="question-title">Câu 2: Số Zalo / điện thoại của bạn?</label>
           <input type="tel" name="So_Dien_Thoai" required placeholder="09xx...">
         </div>
 
         <div class="question-block">
-          <label class="question-title">Câu 3: Bạn thường mua quà tặng dịp nào nhiều nhất? (chọn tối đa 2)</label>
+          <label class="question-title">Câu 3: Email của bạn?</label>
+          <p class="question-note">(Để nhận tài liệu hướng dẫn và mã giảm giá)</p>
+          <input type="email" name="Email" required placeholder="example@gmail.com" style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 1.05rem;">
+        </div>
+
+        <div class="question-block">
+          <label class="question-title">Câu 4: Bạn thường mua quà tặng dịp nào nhiều nhất? (chọn tối đa 2)</label>
           <label class="option-label"><input type="checkbox" name="Dip_Tang_Qua" value="Sinh nhật"> <span>Sinh nhật bạn thân</span></label>
           <label class="option-label"><input type="checkbox" name="Dip_Tang_Qua" value="Lễ"> <span>Valentine / 8/3 / ngày lễ</span></label>
           <label class="option-label"><input type="checkbox" name="Dip_Tang_Qua" value="Chia tay/Tốt nghiệp"> <span>Chia tay công ty / tốt nghiệp</span></label>
@@ -527,7 +532,7 @@
         </div>
 
         <div class="question-block">
-          <label class="question-title">Câu 4: Khi phải chọn quà, bạn thường cảm thấy thế nào?</label>
+          <label class="question-title">Câu 5: Khi phải chọn quà, bạn thường cảm thấy thế nào?</label>
           <label class="option-label"><input type="radio" name="Cam_Nhan_Chon_Qua" value="Stress" required> <span>Stress — không biết tặng gì, sợ sai</span></label>
           <label class="option-label"><input type="radio" name="Cam_Nhan_Chon_Qua" value="Ổn"> <span>Ổn — tặng thứ quen thôi</span></label>
           <label class="option-label"><input type="radio" name="Cam_Nhan_Chon_Qua" value="Thích tìm thứ độc lạ"> <span>Thích tìm thứ độc lạ nhưng mất thời gian</span></label>
@@ -535,7 +540,7 @@
         </div>
 
         <div class="question-block" style="margin-bottom: 35px;">
-          <label class="question-title">Câu 5: Bạn sẵn sàng chi bao nhiêu cho một hộp quà độc lạ, đóng gói đẹp?</label>
+          <label class="question-title">Câu 6: Bạn sẵn sàng chi bao nhiêu cho một hộp quà độc lạ, đóng gói đẹp?</label>
           <label class="option-label"><input type="radio" name="Ngan_Sach" value="Dưới 100k" required> <span>Dưới 100k</span></label>
           <label class="option-label"><input type="radio" name="Ngan_Sach" value="100k – 200k"> <span>100k – 200k</span></label>
           <label class="option-label"><input type="radio" name="Ngan_Sach" value="200k – 350k"> <span>200k – 350k</span></label>
@@ -565,6 +570,10 @@
                 <div style="margin-bottom: 15px;">
                     <label style="display:block; font-weight:bold; margin-bottom:5px;">Số điện thoại</label>
                     <input type="text" id="co_phone" required placeholder="09xxxxxxx" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; font-weight:bold; margin-bottom:5px;">Email nhận thông báo</label>
+                    <input type="email" id="co_email" required placeholder="example@gmail.com" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;">
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label style="display:block; font-weight:bold; margin-bottom:5px;">Sản phẩm</label>
@@ -616,6 +625,7 @@
             const data = {
                 name: document.getElementById('co_name').value,
                 phone: document.getElementById('co_phone').value,
+                email: document.getElementById('co_email').value,
                 product_id: document.getElementById('co_productId').value
             };
 
@@ -831,6 +841,19 @@
 
         fetch(scriptURL, { method: 'POST', body: formData })
           .then(response => {
+            // ĐỒNG BỘ VÀO CRM SUPABASE
+            const crmData = {
+              name: formData.get('Ten'),
+              phone: formData.get('So_Dien_Thoai'),
+              email: formData.get('Email'),
+              zalo: formData.get('So_Dien_Thoai')
+            };
+            fetch('/api/waitlist', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(crmData)
+            });
+
             surveyBtn.innerHTML = '🎉 CẢM ƠN BẠN! FORM ĐÃ GỬI';
             surveyBtn.style.backgroundColor = '#4CAF50';
             surveyForm.reset();

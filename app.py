@@ -97,6 +97,7 @@ def add_customer():
     data = {
         "name": request.form['name'],
         "phone_number": request.form['phone'],
+        "email": request.form.get('email', ''),
         "zalo": request.form['zalo'],
         "registration_date": request.form['date']
     }
@@ -175,6 +176,7 @@ def api_create_order():
     data = request.json
     name = data.get('name')
     phone = data.get('phone')
+    email = data.get('email')
     product_id = data.get('product_id')
     date_str = datetime.now().isoformat()
     
@@ -188,7 +190,7 @@ def api_create_order():
     else:
         # Tạo KH
         new_cust = supabase_insert('customers', {
-            "name": name, "phone_number": phone, "zalo": phone, "registration_date": date_str
+            "name": name, "phone_number": phone, "email": email, "zalo": phone, "registration_date": date_str
         })
         if new_cust and len(new_cust) > 0:
             customer_id = new_cust[0]['id']
@@ -244,6 +246,27 @@ def webhook_sepay():
                 
     print(">>> WEBHOOK: Không khớp đơn hàng pending nào. Nội dung:", payload_str)
     return jsonify({"success": True, "message": "Ignored"})
+
+@app.route('/api/waitlist', methods=['POST'])
+def api_waitlist():
+    data = request.json
+    name = data.get('name')
+    phone = data.get('phone')
+    email = data.get('email')
+    zalo = data.get('zalo')
+    
+    if not phone or not email:
+        return jsonify({"success": False, "message": "Thiếu thông tin"})
+        
+    date_str = datetime.now().isoformat()
+    # Kiểm tra xem khách đã tồn tại chưa
+    cust = supabase_get('customers', f'phone_number=eq.{phone}')
+    if not cust or len(cust) == 0:
+        supabase_insert('customers', {
+            "name": name, "phone_number": phone, "email": email, "zalo": zalo, "registration_date": date_str
+        })
+        return jsonify({"success": True, "message": "Đã thêm vào waitlist"})
+    return jsonify({"success": True, "message": "Khách đã tồn tại"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000, host='0.0.0.0')
