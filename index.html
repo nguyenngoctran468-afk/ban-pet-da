@@ -589,33 +589,50 @@
         <!-- STEP 2: QR CODE -->
         <div id="step2-qr" style="display:none; text-align:center;">
             <p style="margin-bottom: 10px; font-weight: 500;">Mã đơn hàng của bạn:</p>
-            <div style="font-family:monospace; font-size:1.2rem; background:#fff7ed; padding:8px 16px; border-radius:8px; color:#c2410c; font-weight:800; border:1px solid #ffedd5; display:inline-block; margin-bottom:15px;" id="display-order-id">MÃ ĐƠN</div>
+            <div style="font-family:monospace; font-size:1.2rem; background:#fff7ed; padding:8px 16px; border-radius:999px; color:#c2410c; font-weight:800; border:1px solid #ffedd5; display:inline-block; margin-bottom:15px;" id="display-order-id">MÃ ĐƠN</div>
             
-            <div style="background: white; padding: 10px; border-radius: 12px; border: 1px solid #f3f4f6; display: inline-block;">
-                <img id="qr-image" src="" alt="QR Thanh Toán" style="max-width:240px; display: block;">
+            <div style="display: block;">
+                <div style="background: white; border-radius: 20px; padding: 15px; border: 1px solid #f1f5f9; display: inline-block; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin: 20px 0; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 4px solid #f97316; border-radius: 20px; animation: pulse-qr 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; z-index: -1;"></div>
+                    <style>@keyframes pulse-qr { 0% { transform: scale(0.95); opacity: 0.5; } 100% { transform: scale(1.1); opacity: 0; } }</style>
+                    <img id="qr-image" src="" alt="QR Thanh Toán" style="max-width:240px; display: block; border-radius: 12px;">
+                </div>
             </div>
             
             <p style="color: #dc2626; font-weight: 600; margin-top:15px; background: #fef2f2; padding: 12px; border-radius: 8px; font-size: 0.9rem; border: 1px solid #fee2e2;">⚠️ Vui lòng CẦM NGUYÊN nội dung chuyển khoản. Tuyệt đối không xóa/sửa!</p>
-            <div style="margin-top: 15px; color: #6b7280; font-size: 0.9rem;">
-                <div class="loader-mini" style="border: 2px solid #f3f3f3; border-top: 2px solid #f97316; border-radius: 50%; width: 16px; height: 16px; animation: spin-alt 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 5px;"></div>
-                <style>@keyframes spin-alt { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
-                <span style="font-style: italic;">Đang chờ xác nhận tự động (5-10s)...</span>
+            <div style="margin-top: 20px; color: #64748b; font-size: 0.9rem;">
+                <div style="width: 10px; height: 10px; background: #f97316; border-radius: 50%; display: inline-block; margin-right: 8px; animation: glow-alt 1.5s ease-in-out infinite;"></div>
+                <style>@keyframes glow-alt { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }</style>
+                <span style="font-style: italic; font-weight: 500;">Đang chờ ngân hàng báo có (5-10s)...</span>
             </div>
         </div>
         
         <!-- STEP 3: SUCCESS (THANK YOU PAGE) -->
         <div id="step3-success" style="display:none; text-align:center; padding: 20px 0;">
-            <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 1s ease;">🎉</div>
-            <style>@keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }</style>
-            <h2 style="color: #059669; margin-top:0; font-size: 1.6rem;">Tuyệt vời! Đã chốt đơn</h2>
-            <p style="color: #4b5563;">Chúng mình đã nhận được thanh toán. Một em "Pet Đá" sắp có nhà mới rồi!</p>
+            <div style="font-size: 4rem; margin-bottom: 20px; animation: pop-in-alt 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);">🎉</div>
+            <style>@keyframes pop-in-alt { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }</style>
+            <h2 style="color: #059669; margin-top:0; font-size: 1.75rem; font-weight: 800;">Tuyệt vời! Đã chốt đơn</h2>
+            <p style="color: #475569; font-weight: 500; line-height: 1.6;">Bé đá đang được tắm rửa sạch sẽ để chờ bạn... <br>Hệ thống đã ghi nhận thanh toán thành công!</p>
             
-            <div style="background: #ecfdf5; border-radius: 12px; padding: 20px; margin-top: 20px; text-align: left; border: 1px solid #d1fae5;">
-                <h4 style="margin: 0 0 10px 0; color: #065f46;">Thông tin đơn hàng:</h4>
-                <p style="margin: 5px 0; font-size: 0.95rem; color: #047857;"><b>👤 Người nhận:</b> <span id="summary-name">...</span></p>
-                <p style="margin: 5px 0; font-size: 0.95rem; color: #047857;"><b>🎫 Mã Đơn:</b> <mark id="summary-orderid" style="background:#059669; color:white; padding:2px 6px; border-radius:4px;">...</mark></p>
+            <div style="background: #f0fdf4; border-radius: 16px; padding: 24px; margin-top: 24px; text-align: left; border: 1px solid #dcfce7;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #bbf7d0;">
+                    <span style="color: #166534; font-weight: 600; font-size: 0.875rem;">CHỦ NHÂN:</span>
+                    <span style="color: #14532d; font-weight: 700;" id="summary-name">...</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #bbf7d0;">
+                    <span style="color: #166534; font-weight: 600; font-size: 0.875rem;">BÉ ĐÁ:</span>
+                    <span style="color: #14532d; font-weight: 700;" id="summary-product">...</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #bbf7d0;">
+                    <span style="color: #166534; font-weight: 600; font-size: 0.875rem;">MÃ ĐƠN:</span>
+                    <span style="color: #c2410c; font-weight: 700;" id="summary-orderid">...</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #166534; font-weight: 600; font-size: 0.875rem;">TRẠNG THÁI:</span>
+                    <span style="color: #166534; font-weight: 700;">✅ Thành công</span>
+                </div>
             </div>
-            <a href="/" class="btn" style="display:inline-block; margin-top:25px; background: #111827; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold;">Tiếp tục khám phá</a>
+            <a href="/" class="btn" style="display:inline-block; margin-top:25px; background: #0f172a; color: white; text-decoration: none; padding: 16px 32px; border-radius: 40px; font-weight: 800; font-size: 1rem; transition: all 0.2s;">QUAY LẠI TRANG CHỦ</a>
         </div>
 
       </div>
@@ -690,6 +707,8 @@
                     
                     // Hiển thị tóm tắt đơn hàng
                     document.getElementById('summary-name').innerText = document.getElementById('co_name').value;
+                    const productSelect = document.getElementById('co_productId');
+                    document.getElementById('summary-product').innerText = productSelect.options[productSelect.selectedIndex].text.split(' - ')[0];
                     document.getElementById('summary-orderid').innerText = document.getElementById('display-order-id').innerText;
                     
                     document.getElementById('step2-qr').style.display = 'none';
