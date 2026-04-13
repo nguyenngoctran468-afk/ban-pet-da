@@ -195,34 +195,62 @@ def add_order():
         target_email = cust[0].get('email')
         if target_email:
             subject = f"🛒 Ê, chốt đơn thành công rồi nha! Đợi Bé Đá tới 'giải nghiệp' cho bạn nè"
-            prod_name = supabase_get('products', f"id=eq.{product_id}")[0].get('name') if product_id else 'Sản phẩm Pet Đá'
-            amount_formatted = "{:,.0f}".format(float(data['amount']))
-            status_text = "Đã thanh toán ✅" if data['status'] == 'success' else "Chờ thanh toán ⏳"
+            is_ebook = "Ebook" in prod_name
             
-            content = f"""
-            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-                <h3>Chào {cust[0].get('name')},</h3>
-                <p>Nghe đồn bạn vừa quyết định đón một bé <b>{prod_name}</b> về đúng không? Chúc mừng bạn nha, từ nay bàn làm việc của bạn sẽ có một thành viên mới "ngoan" nhất thế giới: Bao chửi, bao ngồi im, bao nghe than vãn mà không bao giờ mách lẻo với sếp.</p>
-                
-                <div style="background: #f4f7f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                    <p><b>Thông tin đơn của bạn nè:</b></p>
-                    <ul style="list-style: none; padding: 0;">
-                        <li>📦 <b>Sản phẩm:</b> {prod_name}</li>
-                        <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
-                        <li>⚡ <b>Trạng thái:</b> {status_text}</li>
-                    </ul>
-                </div>
+            if is_ebook:
+                subject = f"📚 [BÍ KÍP] Cẩm Nang Pet Đá đã tới! Mở ra để 'giác ngộ' ngay nè bạn ơi"
+                content = f"""
+                <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+                    <h3>Chào {cust[0].get('name')},</h3>
+                    <p>Chúc mừng bạn đã chính thức sở hữu <b>{prod_name}</b> - cuốn "tài liệu mật" chuyên trị các triệu chứng stress, hụt hơi vì deadline và các pha "khó đỡ" từ đồng nghiệp.</p>
+                    
+                    <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 5px solid #4f46e5;">
+                        <p><b>Chi tiết đơn của bạn:</b></p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>📖 <b>Sản phẩm:</b> {prod_name}</li>
+                            <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
+                        </ul>
+                    </div>
 
-                <p><b>🚚 Hướng dẫn nhận hàng:</b></p>
-                <p>Bé đá đang được mình "tắm rửa" sạch sẽ, đóng gói cực kỳ cẩn thận vào hộp xịn, đính thêm cả Giấy Khai Sinh viết tay nữa. Bạn chỉ cần giữ điện thoại, khi nào shipper bốc máy gọi thì bay ra nhận là xong. Nhớ lúc khui hộp phải nhẹ tay kẻo ẻm giật mình nha!</p>
-                
-                <p>Cảm ơn bạn đã ủng hộ một khởi nghiệp vô tri như mình. Hy vọng bé đá sẽ giúp bạn "tịnh tâm" bước qua mùa deadline này.</p>
-                
-                <br>
-                <p>Thân ái (và quyết thắng deadline),<br>
-                <b>Team Pet Đá</b></p>
-            </div>
-            """
+                    <p><b>🚚 Hướng dẫn nhận 'bí kíp':</b></p>
+                    <p>Vì đây là sản phẩm tâm linh kỹ thuật số, bạn không cần phải đứng cửa chờ shipper đâu. Bạn có thể nhấn vào link dưới đây để đọc ngay và luôn:</p>
+                    <p style="text-align: center; margin: 30px 0;">
+                        <a href="https://bit.ly/cam-nang-pet-da" style="background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold;">👉 TẢI EBOOK TẠI ĐÂY</a>
+                    </p>
+                    <p><i>*(Nhớ lưu về máy để mỗi lần bị sếp dí là mở ra đọc cho "tịnh tâm" nhé!)*</i></p>
+                    
+                    <p>Cảm ơn bạn đã ủng hộ tinh thần vô tri của team. Hy vọng cuốn sách này sẽ giúp bạn sống sót qua 1001 kiếp nạn công sở.</p>
+                    
+                    <br>
+                    <p>Thân ái (và chúc bạn sớm thành chánh quả),<br>
+                    <b>Team Pet Đá</b></p>
+                </div>
+                """
+            else:
+                content = f"""
+                <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+                    <h3>Chào {cust[0].get('name')},</h3>
+                    <p>Nghe đồn bạn vừa quyết định đón một bé <b>{prod_name}</b> về đúng không? Chúc mừng bạn nha, từ nay bàn làm việc của bạn sẽ có một thành viên mới "ngoan" nhất thế giới: Bao chửi, bao ngồi im, bao nghe than vãn mà không bao giờ mách lẻo với sếp.</p>
+                    
+                    <div style="background: #f4f7f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p><b>Thông tin đơn của bạn nè:</b></p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>📦 <b>Sản phẩm:</b> {prod_name}</li>
+                            <li>💰 <b>Tổng thiệt hại:</b> {amount_formatted}đ</li>
+                            <li>⚡ <b>Trạng thái:</b> {status_text}</li>
+                        </ul>
+                    </div>
+
+                    <p><b>🚚 Hướng dẫn nhận hàng:</b></p>
+                    <p>Bé đá đang được mình "tắm rửa" sạch sẽ, đóng gói cực kỳ cẩn thận vào hộp xịn, đính thêm cả Giấy Khai Sinh viết tay nữa. Bạn chỉ cần giữ điện thoại, khi nào shipper bốc máy gọi thì bay ra nhận là xong. Nhớ lúc khui hộp phải nhẹ tay kẻo ẻm giật mình nha!</p>
+                    
+                    <p>Cảm ơn bạn đã ủng hộ một khởi nghiệp vô tri như mình. Hy vọng bé đá sẽ giúp bạn "tịnh tâm" bước qua mùa deadline này.</p>
+                    
+                    <br>
+                    <p>Thân ái (và quyết thắng deadline),<br>
+                    <b>Team Pet Đá</b></p>
+                </div>
+                """
             send_email(target_email, subject, content)
         
     return redirect(url_for('admin', tab='orders'))
