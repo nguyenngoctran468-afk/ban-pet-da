@@ -280,8 +280,14 @@ def api_create_order():
     cust = supabase_get('customers', f'phone_number=eq.{phone}')
     if cust and isinstance(cust, list) and len(cust) > 0:
         customer_id = cust[0]['id']
+        # CẬP NHẬT thông tin mới nhất cho khách hàng cũ (để tránh trường hợp tên bị cũ khi test)
+        supabase_update('customers', 'id', customer_id, {
+            "name": name, 
+            "email": email,
+            "zalo": phone # Cập nhật luôn zalo theo số mới
+        })
     else:
-        # Tạo KH
+        # Tạo KH mới
         new_cust = supabase_insert('customers', {
             "name": name, "phone_number": phone, "email": email, "zalo": phone, "registration_date": date_str
         })
