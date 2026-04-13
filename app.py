@@ -70,14 +70,23 @@ def send_email(to_email, subject, html_content):
             print(">>> LỖI: Chưa cấu hình Resend API Key (Kiểm tra Environment Variables trên Render)")
             return False
     try:
+        # FIX LỖI SANDBOX: Nếu gửi tới email có dấu +, Resend Free có thể chặn.
+        # Ta sẽ gửi tới email gốc nếu là chế độ test để Resend cho phép.
+        final_to = to_email
+        if "onboarding@resend.dev" in "onboarding@resend.dev" and "+" in to_email:
+             # Nếu là email gmail có dấu +, ta lấy phần trước dấu + và phần sau dấu @
+             parts = to_email.split('@')
+             if '+' in parts[0]:
+                 final_to = parts[0].split('+')[0] + '@' + parts[1]
+
         params = {
             "from": "onboarding@resend.dev",
-            "to": [to_email],
+            "to": [final_to],
             "subject": subject,
             "html": html_content,
         }
         resend.Emails.send(params)
-        print(f">>> [SUCCESS] Đã gửi email tới: {to_email}")
+        print(f">>> [SUCCESS] Đã gửi email tới: {final_to} (Gốc: {to_email})")
         return True
     except Exception as e:
         error_msg = str(e)
@@ -314,15 +323,17 @@ def webhook_sepay():
 
 @app.route('/admin/resend-test')
 def admin_resend_test():
-    test_email = "nguyenngoctran468@gmail.com" # Email chính chủ của bạn
-    subject = "🔔 TEST KẾT NỐI RESEND"
-    content = "<p>Nếu bạn thấy thư này, nghĩa là hệ thống đã kết nối Resend thành công!</p>"
+    test_email = "nguyenngoctran468@gmail.com" # Email chính chủ
     
-    success = send_email(test_email, subject, content)
-    if success:
-        return f"<h3>Thành công! Hãy kiểm tra hộp thư {test_email}</h3><a href='/admin?tab=customers'>Quay lại Admin</a>"
+    # Gửi cả 3 email sequence luôn để bạn kiểm tra
+    s1 = send_email(test_email, EMAIL_TEMPLATES["welcome"]["subject"], EMAIL_TEMPLATES["welcome"]["content"])
+    s2 = send_email(test_email, EMAIL_TEMPLATES["nurture"]["subject"], EMAIL_TEMPLATES["nurture"]["content"])
+    s3 = send_email(test_email, EMAIL_TEMPLATES["sales"]["subject"], EMAIL_TEMPLATES["sales"]["content"])
+    
+    if s1 and s2 and s3:
+        return f"<h3>Thành công! Đã gửi cả 3 email trong Sequence tới {test_email}</h3><a href='/admin?tab=customers'>Quay lại Admin</a>"
     else:
-        return f"<h3>Thất bại! Có lỗi xảy ra. Hãy kiểm tra Logs trên Render hoặc Environment Variables.</h3><p>Đã thử gửi tới: {test_email}</p><a href='/admin?tab=customers'>Quay lại Admin</a>"
+        return f"<h3>Có lỗi xảy ra (Ít nhất 1 email thất bại).</h3><p>Hãy kiểm tra Logs hoặc Env Var.</p><a href='/admin?tab=customers'>Quay lại Admin</a>"
 
 # ==========================================
 # EMAIL SEQUENCE LOGIC
