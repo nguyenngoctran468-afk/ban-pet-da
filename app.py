@@ -50,6 +50,11 @@ def supabase_delete(table, match_col, match_val):
 # CẤU HÌNH RESEND EMAIL
 # ==========================================
 def load_resend_key():
+    # Ưu tiên lấy từ Biến môi trường (Environment Variable) trên Render
+    key = os.environ.get('RESEND_API_KEY')
+    if key:
+        return key.strip()
+    # Nếu không có thì mới đọc từ file
     try:
         with open('resend_config.txt', 'r') as f:
             return f.read().strip()
@@ -60,20 +65,25 @@ resend.api_key = load_resend_key()
 
 def send_email(to_email, subject, html_content):
     if not resend.api_key:
-        print(">>> LỖI: Chưa cấu hình Resend API Key")
-        return False
+        resend.api_key = load_resend_key() # Thử load lại
+        if not resend.api_key:
+            print(">>> LỖI: Chưa cấu hình Resend API Key (Kiểm tra Environment Variables trên Render)")
+            return False
     try:
         params = {
-            "from": "onboarding@resend.dev", # Dùng email mặc định của Resend
+            "from": "onboarding@resend.dev",
             "to": [to_email],
             "subject": subject,
             "html": html_content,
         }
         resend.Emails.send(params)
-        print(f">>> Đã gửi email tới: {to_email}")
+        print(f">>> [SUCCESS] Đã gửi email tới: {to_email}")
         return True
     except Exception as e:
-        print(f">>> LỖI gửi email: {str(e)}")
+        error_msg = str(e)
+        print(f">>> [ERROR] Gửi email thất bại tới {to_email}: {error_msg}")
+        if "restricted" in error_msg.lower() or "forbidden" in error_msg.lower():
+            print(">>> LƯU Ý: Resend Free chỉ cho phép gửi tới email đăng ký của bạn. Hãy verify domain để gửi cho khách lạ.")
         return False
 
 # ==========================================
