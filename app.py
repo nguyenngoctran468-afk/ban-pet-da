@@ -311,10 +311,20 @@ def api_create_order():
 
 @app.route('/api/check_order/<int:id>', methods=['GET'])
 def check_order(id):
+    # Thêm Cache-Control để trình duyệt không lưu phản hồi cũ
     order = supabase_get('orders', f'id=eq.{id}')
+    
+    response_data = {"success": False}
     if order and len(order) > 0:
-        return jsonify({"success": True, "status": order[0].get('status')})
-    return jsonify({"success": False})
+        status = order[0].get('status')
+        print(f">>> [CHECK ORDER] Đơn #{id} hiện tại: {status}")
+        response_data = {"success": True, "status": status}
+    
+    res = jsonify(response_data)
+    res.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    res.headers['Pragma'] = 'no-cache'
+    res.headers['Expires'] = '0'
+    return res
 
 @app.route('/api/webhook/sepay', methods=['POST'])
 def webhook_sepay():
