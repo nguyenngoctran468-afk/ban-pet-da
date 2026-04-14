@@ -13,9 +13,10 @@ CORS(app)
 
 # ==========================================
 # CẤU HÌNH SUPABASE ONLINE
+# Đọc từ Environment Variable (VPS/Render) trước — không hardcode secrets!
 # ==========================================
-SUPABASE_URL = "https://aahbbepwytfpuzjuxocv.supabase.co"
-SUPABASE_KEY = "sb_publishable_WLySCRyt5XwNVFeKC7XoVw_3JQGb9kg"
+SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://aahbbepwytfpuzjuxocv.supabase.co')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
 
 headers = {
     "apikey": SUPABASE_KEY,

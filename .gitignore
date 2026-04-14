@@ -1,0 +1,36 @@
+# === BÍ MẬT - TUYỆT ĐỐI KHÔNG COMMIT ===
+.env
+resend_config.txt
+
+# Database SQLite cũ (đã migrate sang Supabase)
+brain.db
+*.db
+
+# Font files nặng (tải thủ công khi cần)
+*.ttf
+*.otf
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
