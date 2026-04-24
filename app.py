@@ -99,6 +99,11 @@ def index():
 def serve_static(path):
     return send_from_directory('.', path)
 
+@app.route('/api/products')
+def api_products():
+    products = supabase_get('products', 'order=id.asc')
+    return jsonify(products)
+
 @app.route('/admin')
 def admin():
     tab = request.args.get('tab', 'products')

@@ -658,6 +658,27 @@
         let currentOrderId = null;
         let pollInterval = null;
 
+        // --- Tự động load giá mới nhất từ Database ---
+        async function loadProducts() {
+            try {
+                const res = await fetch(baseUrl + '/api/products');
+                if (!res.ok) return;
+                const products = await res.json();
+                const select = document.getElementById('co_productId');
+                select.innerHTML = ''; 
+                products.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.innerText = `${p.name} - ${p.price.toLocaleString('vi-VN')}đ`;
+                    select.appendChild(option);
+                });
+            } catch (err) {
+                console.error("Failed to load products dynamically:", err);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadProducts);
+        // ---------------------------------------------
+
         document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
