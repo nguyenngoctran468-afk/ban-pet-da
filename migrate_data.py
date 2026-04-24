@@ -3,9 +3,12 @@ import requests
 import json
 
 import os
-SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://aahbbepwytfpuzjuxocv.supabase.co')
-SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
+from dotenv import load_dotenv
 
+load_dotenv()
+
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
 headers = {
     "apikey": SUPABASE_KEY,
     "Authorization": f"Bearer {SUPABASE_KEY}",

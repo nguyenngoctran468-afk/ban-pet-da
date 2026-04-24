@@ -7,6 +7,9 @@ import resend
 import threading
 import time
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -15,7 +18,7 @@ CORS(app)
 # CẤU HÌNH SUPABASE ONLINE
 # Đọc từ Environment Variable (VPS/Render) trước — không hardcode secrets!
 # ==========================================
-SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://aahbbepwytfpuzjuxocv.supabase.co')
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
 
 headers = {
@@ -51,23 +54,11 @@ def supabase_delete(table, match_col, match_val):
 # ==========================================
 # CẤU HÌNH RESEND EMAIL
 # ==========================================
-def load_resend_key():
-    # Ưu tiên lấy từ Biến môi trường (Environment Variable) trên Render
-    key = os.environ.get('RESEND_API_KEY')
-    if key:
-        return key.strip()
-    # Nếu không có thì mới đọc từ file
-    try:
-        with open('resend_config.txt', 'r') as f:
-            return f.read().strip()
-    except:
-        return None
-
-resend.api_key = load_resend_key()
+resend.api_key = os.environ.get('RESEND_API_KEY')
 
 def send_email(to_email, subject, html_content):
     if not resend.api_key:
-        resend.api_key = load_resend_key() # Thử load lại
+        resend.api_key = os.environ.get('RESEND_API_KEY') # Thử load lại
         if not resend.api_key:
             print(">>> LỖI: Chưa cấu hình Resend API Key (Kiểm tra Environment Variables trên Render)")
             return False
@@ -487,4 +478,5 @@ def api_waitlist():
     return jsonify({"success": True, "message": msg})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3000, host='0.0.0.0')
+    port = int(os.environ.get('PORT', 3000))
+    app.run(debug=True, port=port, host='0.0.0.0')
