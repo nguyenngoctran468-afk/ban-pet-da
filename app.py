@@ -354,12 +354,25 @@ def webhook_sepay():
                 supabase_update('orders', 'id', order_id, {"status": "success", "payment_method": "auto"})
                 
                 # Trừ kho
-                product_id = order_data.get('product_id')
+                product_id = int(order_data.get('product_id'))
                 prod = supabase_get('products', f"id=eq.{product_id}")
                 if prod and isinstance(prod, list) and len(prod) > 0:
                     current_stock = int(prod[0].get('stock', 0))
                     supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
                 
+                # GIAO HÀNG TỰ ĐỘNG NẾU LÀ SẢN PHẨM SỐ (ID: 3)
+                if product_id == 3:
+                    customer = supabase_get('customers', f"id=eq.{order_data.get('customer_id')}")
+                    if customer and len(customer) > 0:
+                        target_email = customer[0].get('email')
+                        if target_email:
+                            email_content = EMAIL_TEMPLATES["ebook_delivery"]["content"].format(
+                                order_id=order_id, 
+                                email=target_email
+                            )
+                            send_email(target_email, EMAIL_TEMPLATES["ebook_delivery"]["subject"], email_content)
+                            print(f">>> [DIGITAL DELIVERY] Đã gửi Ebook tới {target_email}")
+
                 print(f">>> [SEPAY WEBHOOK] CHÚC MỪNG: Đơn {order_id} đã thanh toán thành công!")
                 return jsonify({"success": True, "message": f"Order {order_id} updated to success"})
             else:
@@ -385,6 +398,52 @@ def admin_resend_test():
         return f"<h3>Thành công! Đã gửi cả 3 email trong Sequence tới {test_email}</h3><a href='/admin?tab=customers'>Quay lại Admin</a>"
     else:
         return f"<h3>Có lỗi xảy ra (Ít nhất 1 email thất bại).</h3><p>Hãy kiểm tra Logs hoặc Env Var.</p><a href='/admin?tab=customers'>Quay lại Admin</a>"
+
+# ------------- SẢN PHẨM SỐ (EBOOK) -------------
+@app.route('/san-pham/<slug>')
+def product_landing(slug):
+    if slug != 'ai-affiliate-blueprint':
+        return "Sản phẩm không tồn tại", 404
+    product = supabase_get('products', 'id=eq.3')
+    prod_data = product[0] if product else {"price": 397000}
+    return render_template('ebook_landing.html', slug=slug, product=prod_data)
+
+@app.route('/san-pham/<slug>/checkout')
+def product_checkout(slug):
+    if slug != 'ai-affiliate-blueprint':
+        return "Sản phẩm không tồn tại", 404
+    product = supabase_get('products', 'id=eq.3')
+    if not product:
+        return "Lỗi lấy sản phẩm", 500
+    return render_template('ebook_checkout.html', slug=slug, product=product[0])
+
+@app.route('/san-pham/<slug>/cam-on')
+def product_thankyou(slug):
+    order_id = request.args.get('order_id')
+    email = request.args.get('email')
+    return render_template('ebook_cam_on.html', slug=slug, order_id=order_id, email=email)
+
+@app.route('/api/download/ebook')
+def download_ebook():
+    order_id = request.args.get('order_id')
+    email = request.args.get('email')
+    
+    if not order_id or not email:
+        return "Thiếu thông tin xác thực", 400
+        
+    order = supabase_get('orders', f'id=eq.{order_id}')
+    if not order or len(order) == 0:
+        return "Đơn hàng không tồn tại", 404
+        
+    if order[0].get('status') != 'success':
+        return "Đơn hàng chưa được thanh toán", 403
+        
+    customer = supabase_get('customers', f"id=eq.{order[0].get('customer_id')}")
+    if not customer or customer[0].get('email') != email:
+        return "Email không khớp với đơn hàng", 403
+        
+    products_dir = os.path.join(app.root_path, 'products')
+    return send_from_directory(products_dir, 'ai_affiliate_blueprint.pdf', as_attachment=True)
 
 # ==========================================
 # EMAIL SEQUENCE LOGIC
@@ -427,6 +486,33 @@ EMAIL_TEMPLATES = {
         <p>👉 <b><a href='https://ban-pet-da.onrender.com/checkout'>ĐẶT HÀNG TẠI ĐÂY</a></b></p>
         <br>
         <p>Hẹn gặp bạn và bé đá của bạn,<br><b>Team Pet Đá</b></p>
+        """
+    },
+    "ebook_delivery": {
+        "subject": "🔥 [DOWNLOAD] Bản thiết kế AI Affiliate Blueprint của bạn đây!",
+        "content": """
+        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #6366f1;">Chúc mừng bạn đã sở hữu AI Affiliate Blueprint!</h2>
+            <p>Chào bạn, tấm vé thông hành vào thị trường TikTok US đã nằm trong tay bạn. Đây là bước ngoặt để bạn bắt đầu kiếm thu nhập bằng USD với sự trợ giúp của AI.</p>
+            
+            <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 20px 0;">
+                <h3 style="margin-top: 0;">📦 Link Tải Tài Liệu:</h3>
+                <p>Bạn có thể tải về máy trực tiếp tại đây (link có hiệu lực vĩnh viễn):</p>
+                <a href="https://phaodr.com/api/download/ebook?order_id={order_id}&email={email}" style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">TẢI EBOOK (.PDF)</a>
+            </div>
+
+            <h3>🎁 Quà tặng kèm theo (Bonus):</h3>
+            <ul>
+                <li><b>Checklist 20 lỗi bay nick:</b> Đã đính kèm trong Ebook.</li>
+                <li><b>Top 10 sản phẩm Supplement:</b> Xem tại Chương 6.</li>
+                <li><b>Bộ Prompt AI độc quyền:</b> Xem tại Chương 4.</li>
+            </ul>
+
+            <p>Nếu gặp khó khăn trong quá trình tải file hoặc setup, hãy nhắn tin ngay cho Support trong nhóm Zalo nhé.</p>
+            <p>Hẹn gặp bạn ở vạch đích!</p>
+            <br>
+            <p>Thân ái,<br><b>Team AI Affiliate</b></p>
+        </div>
         """
     }
 }

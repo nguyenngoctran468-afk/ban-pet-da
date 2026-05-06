@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Affiliate Blueprint</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FAF7F2; /* Cream Light Mode */
+            --text-color: #1A1A1A; /* Black text */
+            --accent-color: #8B5CF6; /* Purple */
+            --accent-secondary: #06b6d4; /* Cyan */
+            --heading-color: #1A1A1A;
+            --card-bg: #FFFFFF;
+            --border-color: #E2E8F0;
+        }
+
+        @page {
+            size: A4;
+            margin: 25mm;
+            @bottom-center {
+                content: "AI Affiliate Blueprint - Trang " counter(page);
+                font-family: 'Inter', sans-serif;
+                font-size: 10pt;
+                color: #64748b;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            font-size: 13pt;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                background-color: var(--bg-color) !important;
+            }
+            .cover-page {
+                min-height: calc(100vh - 40mm);
+                box-sizing: border-box;
+                display: flex !important;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                page-break-after: always;
+                margin-bottom: 0 !important;
+            }
+            h2 {
+                page-break-before: always;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+            a {
+                text-decoration: none;
+                color: var(--accent-color);
+            }
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            color: var(--heading-color);
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        h2 {
+            font-size: 24pt;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        h3 {
+            font-size: 16pt;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 1.2em;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            text-align: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            min-height: calc(100vh - 40mm);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Gradient circle visual */
+        .cover-visual {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+            z-index: 0;
+        }
+        .cover-visual-2 {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            z-index: 0;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 10pt;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .cover-title {
+            font-size: 36pt; /* Reduced from 48pt */
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        .cover-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 16pt;
+            color: #475569;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .cover-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 13pt;
+            color: #64748b;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+        .cover-author {
+            font-size: 14pt;
+            color: #334155;
+            font-weight: 600;
+        }
+        .cover-website {
+            font-size: 11pt;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            page-break-after: always;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .toc h2 {
+            margin-top: 0;
+            font-size: 24pt;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 15px;
+            page-break-before: avoid; /* TOC shouldn't page break if it's the first thing */
+        }
+        
+        .toc-item {
+            margin-bottom: 12px;
+            font-size: 12pt;
+        }
+        .toc-link {
+            display: flex;
+            align-items: baseline;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .toc-link:hover {
+            color: var(--accent-color);
+        }
+        .toc-title {
+            font-weight: 500;
+        }
+        .toc-dots {
+            flex-grow: 1;
+            border-bottom: 2px dotted #cbd5e1;
+            margin: 0 10px;
+            position: relative;
+            top: -4px;
+        }
+        .toc-page {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Content Styling */
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 11pt;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+        th, td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: #F8FAFC;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        /* Code blocks / Prompts */
+        pre {
+            background-color: #F1F5F9;
+            color: #334155;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 10.5pt;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            background-color: #F1F5F9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-color);
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        /* Blockquotes / Key Takeaways */
+        blockquote {
+            margin: 30px 0;
+            padding: 25px;
+            background-color: #F3E8FF; /* Light purple bg */
+            border: 1px solid #D8B4FE;
+            border-left: 6px solid var(--accent-color);
+            border-radius: 8px;
+            color: #4C1D95; /* Dark purple text */
+            font-weight: 500;
+            page-break-inside: avoid;
+        }
+        blockquote p {
+            margin-bottom: 10px;
+        }
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+        
+        ul, ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* Checklist boxes */
+        li:contains("[ ]"), li:contains("[x]") {
+            list-style-type: none;
+        }
+        
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <!-- Cover Page -->
+        <div class="cover-page">
+            <div class="cover-visual"></div>
+            <div class="cover-visual-2"></div>
+            <div class="cover-content">
+                <div class="cover-badge">2026 EDITION</div>
+                <h1 class="cover-title">AI Affiliate Blueprint</h1>
+                <div class="cover-subtitle">Kiếm USD từ TikTok US Bằng AI (No-Face, No-English)</div>
+                <div class="cover-tagline">Lộ trình 14 ngày từ Zero đến đơn đầu tiên</div>
+                <div style="margin-top: 80px;">
+                    <div class="cover-author">Tác giả: Tran Thu Nhat</div>
+                    <div class="cover-website">Website: phaodr.com</div>
+                    <div class="cover-website">© Copyright 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2 style="page-break-before: avoid;">Mục Lục</h2>
+            
+        <div class="toc-item">
+            <a href="#disclaimer" class="toc-link">
+                <span class="toc-title">DISCLAIMER</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">02</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#loi-mo-dau" class="toc-link">
+                <span class="toc-title">LỜI MỞ ĐẦU</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">03</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#phan-1-hieu-cuoc-choi-truoc-khi-dot-tien" class="toc-link">
+                <span class="toc-title">Phần 1: Hiểu Cuộc Chơi Trước Khi Đốt Tiền</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">04</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#phan-2-chuan-bi-vu-khi-de-tang-hinh" class="toc-link">
+                <span class="toc-title">Phần 2: Chuẩn Bị Vũ Khí Để Tàng Hình</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">05</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#phan-3-vuot-ai-account-verification-2026" class="toc-link">
+                <span class="toc-title">Phần 3: Vượt Ải Account Verification 2026</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">06</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#phan-4-build-nha-may-content-bang-ai" class="toc-link">
+                <span class="toc-title">Phần 4: Build Nhà Máy Content Bằng AI</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">07</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#phan-5-hai-cong-thuc-content-chac-chan-ra-don" class="toc-link">
+                <span class="toc-title">Phần 5: Hai Công Thức Content Chắc Chắn Ra Đơn</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">09</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#phan-6-launch-rut-tien-va-checklist" class="toc-link">
+                <span class="toc-title">Phần 6: Launch, Rút Tiền Và Checklist</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">10</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#faq-nhung-cau-hoi-thuong-gap" class="toc-link">
+                <span class="toc-title">FAQ: Những Câu Hỏi Thường Gặp</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">12</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#resource-list" class="toc-link">
+                <span class="toc-title">Resource List</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">14</span>
+            </a>
+        </div>
+    
+        <div class="toc-item">
+            <a href="#ve-tac-gia" class="toc-link">
+                <span class="toc-title">Về Tác Giả</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">15</span>
+            </a>
+        </div>
+    
+        </div>
+
+        <!-- Main Content -->
+        <h2 id="disclaimer">DISCLAIMER</h2>
+<p>Nội dung trong ebook là kinh nghiệm cá nhân của tác giả. TikTok ToS, FTC compliance, và luật thuế Mỹ thay đổi liên tục — bạn tự chịu trách nhiệm cho quyết định kinh doanh của mình. Tác giả không chịu trách nhiệm cho việc tài khoản bị ban hoặc các rủi ro pháp lý phát sinh.</p>
+<h2 id="loi-mo-dau">LỜI MỞ ĐẦU</h2>
+<p><strong>Ebook này dành cho ai:</strong></p>
+<ul>
+<li>Người đi làm văn phòng muốn có thêm dòng thu nhập thụ động bằng USD mà không cần xuất đầu lộ diện.</li>
+<li>Editor, Freelancer muốn tự build kênh affiliate thay vì đi cày thuê mòn mỏi.</li>
+<li>Chủ shop muốn mở rộng tệp khách hàng sang thị trường Global với chi phí thấp nhất.</li>
+</ul>
+<p><strong>Ebook này KHÔNG dành cho ai:</strong></p>
+<ul>
+<li>Những kẻ thích làm giàu sau một đêm, muốn bấm nút là tiền rơi vào đầu.</li>
+<li>Người không có tính kiên nhẫn, tài khoản vừa bị ban 1 lần đã khóc lóc bỏ cuộc.</li>
+</ul>
+<p><strong>Bạn cần chuẩn bị gì:</strong></p>
+<ul>
+<li><strong>Vốn tối thiểu:</strong> Khoảng $50-$100 (để mua Proxy, trả phí tool AI nếu cần thiết).</li>
+<li><strong>Thời gian:</strong> Ít nhất 1-2 tiếng mỗi ngày để setup và nuôi tài khoản ở giai đoạn đầu.</li>
+<li><strong>Công cụ:</strong> 1 chiếc điện thoại (cũ cũng được, miễn reset sạch sẽ), 1 laptop kết nối mạng ổn định.</li>
+</ul>
+<p><strong>Thời gian đọc:</strong>
+Cuốn blueprint này được thiết kế tinh gọn để bạn có thể đọc và hiểu toàn bộ bức tranh trong vòng <strong>45 phút</strong>. </p>
+<p><strong>Cam kết của tôi:</strong>
+Không vẽ vời lý thuyết sáo rỗng. Mọi thứ trong này đều là thực chiến, được đúc kết từ những lần mất tiền ngu. Đọc xong, bạn sẽ biết chính xác mình cần phải bấm vào đâu.</p>
+<hr />
+<h2 id="phan-1-hieu-cuoc-choi-truoc-khi-dot-tien">Phần 1: Hiểu Cuộc Chơi Trước Khi Đốt Tiền</h2>
+<p>Có một kiểu người mình thấy rất nhiều trong ecom. Và mình từng là người đó. </p>
+<p>Nghĩ rằng chỉ cần quăng một cái video AI lên mạng là ngày hôm sau sẽ thành triệu phú. Ngớ ngẩn thật :)).</p>
+<p>Thực ra, nếu bạn không hiểu bản chất của thị trường, bạn chỉ đang ném tiền qua cửa sổ.</p>
+<p><strong>Tại sao lại là TikTok Shop US?</strong></p>
+<p>Người Mỹ có một đặc điểm rất thú vị. Họ lười và họ mua hàng bằng cảm xúc. </p>
+<p>Họ không có thói quen chờ vài ngày để soi xét giá cả như thị trường châu Á. Thấy thích, thấy giải quyết được nỗi đau là họ quẹt thẻ. </p>
+<p>TikTok US đang là nơi dòng tiền luân chuyển mạnh nhất. Năm 2026, nền tảng này không chỉ là mạng xã hội, nó là một cỗ máy phân phối sản phẩm. Thứ này quan trọng hơn bạn nghĩ.</p>
+<p><strong>Bức tranh toàn cảnh về mô hình Affiliate AI</strong></p>
+<p>Về cơ bản, bạn không cần nhập hàng. Bạn không cần lo vận chuyển. Bạn không cần thuê nhân viên support. </p>
+<p>Việc của bạn là tạo ra content đủ tốt để khiến người ta dừng lại 3 giây đầu tiên. Khi họ mua hàng qua link của bạn, bạn nhận hoa hồng. </p>
+<p>Và nhờ AI, bạn thậm chí không cần phải lộ mặt hay tự tay quay video. Bạn build một agent ảo. Nó làm thay bạn mọi thứ. </p>
+<p>Nghe thì dễ. Nhưng nếu làm sai từ bước setup, bạn sẽ bị loại ngay từ vòng gửi xe.</p>
+<blockquote>
+<p><strong>TÓM LẠI 3 Ý CHÍNH:</strong>
+• TikTok US là mỏ vàng vì thói quen mua sắm theo cảm xúc của người Mỹ.
+• Bạn không cần lo nhập hàng hay vận chuyển, chỉ cần tập trung vào content AI.
+• Setup ban đầu quyết định 90% thành bại, sai một ly đi một dặm.</p>
+</blockquote>
+<hr />
+<h2 id="phan-2-chuan-bi-vu-khi-de-tang-hinh">Phần 2: Chuẩn Bị Vũ Khí Để Tàng Hình</h2>
+<p>Muốn bán hàng cho người Mỹ, bạn phải khiến TikTok tin rằng bạn đang ở Mỹ.</p>
+<p>Đừng lấy điện thoại đang xài sim Việt Nam, dùng Wifi quán cà phê rồi mong thuật toán sẽ phân phối video của bạn tới New York. Buồn cười lắm :)).</p>
+<p><strong>Setup thiết bị và IP chuẩn Mỹ</strong></p>
+<p>Đây là yếu tố sống còn. Bạn cần một môi trường làm việc sạch. Đừng tải app TikTok trước khi cấu hình IP. Nếu mở TikTok lần đầu bằng IP Việt Nam, mọi thứ đổ sông đổ bể.</p>
+<p>Dưới đây là các bước setup Proxy SOCKS5 chi tiết:</p>
+<ol>
+<li>Factory Reset điện thoại làm việc để xóa sạch dữ liệu cũ.</li>
+<li>Đăng nhập Apple ID Việt Nam để tải app Shadowrocket (khoảng 99.000 VNĐ).</li>
+<li>Đăng xuất ID Việt Nam, chuyển sang Apple ID US. Đổi vùng App Store sang US.</li>
+<li>Mua Proxy SOCKS5, nhập IP, Port, User, Pass vào Shadowrocket và bật lên.</li>
+<li>Truy cập whoer.net để check xem độ ẩn danh đã đạt 100% chưa.</li>
+</ol>
+<p>Chỉ khi check whoer.net xanh 100%, bạn mới tải app TikTok về máy.</p>
+<p><strong>Lịch trình Warm-up tài khoản 7 đến 10 ngày</strong></p>
+<p>Nuôi tài khoản giống như trồng cây. Đừng vội vàng.</p>
+<table>
+<thead>
+<tr>
+<th>Ngày</th>
+<th>Việc cần làm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ngày 1 đến 2</td>
+<td>Lướt feed 30 phút. Thả tim ngẫu nhiên những video cùng ngách.</td>
+</tr>
+<tr>
+<td>Ngày 3 đến 4</td>
+<td>Xem video trọn vẹn. Bấm lưu vài video. Follow 3 đến 5 kênh đối thủ.</td>
+</tr>
+<tr>
+<td>Ngày 5 đến 6</td>
+<td>Thả vài comment tự nhiên. Share video hữu ích.</td>
+</tr>
+<tr>
+<td>Ngày 7 trở đi</td>
+<td>Bắt đầu đăng video đầu tiên. Mỗi ngày 1 video.</td>
+</tr>
+</tbody>
+</table>
+<p>Túm lại, hãy tàng hình cho đến khi bạn sẵn sàng ra đòn.</p>
+<blockquote>
+<p><strong>TÓM LẠI 3 Ý CHÍNH:</strong>
+• Phải cấu hình IP giả lập môi trường Mỹ (SOCKS5 + Shadowrocket) trước khi tải app.
+• Kiểm tra whoer.net bắt buộc phải xanh 100%.
+• Nuôi tài khoản ngâm như người dùng thật từ 7-10 ngày trước khi đăng video đầu tiên.</p>
+</blockquote>
+<hr />
+<h2 id="phan-3-vuot-ai-account-verification-2026">Phần 3: Vượt Ải Account Verification 2026</h2>
+<p>TikTok Shop US 2026 đã siết cực kỳ chặt quy trình KYC (Know Your Customer). Không còn cái thời tạo tài khoản ảo bằng email rác rồi gắn link bán hàng như 2024 nữa.</p>
+<p>Bây giờ, họ yêu cầu SSN (Social Security Number), EIN, W-9 form và identity verification gắt gao.</p>
+<p><strong>Quy trình verify hiện tại</strong>
+Ngay khi bạn đạt đủ điều kiện mở Affiliate, TikTok sẽ pop-up yêu cầu xác minh danh tính và thuế. Nếu bạn cung cấp thông tin sai lệch, tài khoản sẽ bị đóng băng tiền hoa hồng ngay lập tức. </p>
+<p><strong>3 cách để qua được vòng Verification này:</strong></p>
+<ol>
+<li><strong>Mở LLC tại Mỹ (Đề xuất):</strong> Bạn thành lập công ty LLC (trực tuyến). Sau đó dùng EIN (Employer Identification Number) của công ty để verify. Đây là cách bền vững nhất, tiền về thẳng tài khoản doanh nghiệp.</li>
+<li><strong>EIN-Only (Nách luật):</strong> Dành cho ai chưa có điều kiện mở LLC. Bạn có thể tự apply EIN với tư cách cá nhân không thường trú, tuy nhiên rủi ro bị reject hoặc yêu cầu bổ sung giấy tờ cao hơn.</li>
+<li><strong>Dùng ITIN:</strong> Số định danh người nộp thuế cá nhân. Xin ITIN mất thời gian khá lâu (có khi vài tháng) nhưng lại rất an toàn.</li>
+</ol>
+<p><strong>Lỗi thường gặp và cách fix:</strong>
+Nhiều bạn bị reject vì "Name Mismatch" (tên trên EIN không khớp với tên khai báo) hoặc "Tax Info Invalid". Cách fix duy nhất: Đợi hệ thống IRS cập nhật EIN của bạn (thường mất 10-15 ngày sau khi tạo thành công) rồi mới submit lên TikTok. Đừng vội!</p>
+<blockquote>
+<p><strong>TÓM LẠI 3 Ý CHÍNH:</strong>
+• TikTok US 2026 bắt buộc xác minh danh tính và thuế (EIN/SSN).
+• Mở LLC là con đường an toàn, minh bạch và đường hoàng nhất để làm ăn lâu dài.
+• Đợi IRS cập nhật hệ thống EIN ít nhất 10 ngày trước khi submit cho TikTok.</p>
+</blockquote>
+<hr />
+<h2 id="phan-4-build-nha-may-content-bang-ai">Phần 4: Build Nhà Máy Content Bằng AI</h2>
+<p>Mình từng mất rất nhiều tiền để thuê người mẫu, thuê studio quay video. Giờ thì mọi thứ nằm trong laptop.</p>
+<p>Bạn cần 5 công cụ để xây dựng một quy trình khép kín. </p>
+<p><strong>ChatGPT: Cách viết script ra tiền kèm Prompt mẫu</strong></p>
+<p>Một script chuẩn dài khoảng 80 đến 120 từ tiếng Anh, tương đương 30 đến 45 giây. </p>
+<p>Cấu trúc luôn là: Hook (3s) -&gt; Nêu vấn đề -&gt; Nguyên nhân -&gt; Giải pháp tự nhiên -&gt; Chuyển hướng sản phẩm -&gt; CTA.</p>
+<p>Đây là 3 prompt bạn có thể copy và paste luôn:</p>
+<p><em>Prompt 1: Tìm Hook bắt tai</em></p>
+<pre><code class="language-text">Tôi đang làm video TikTok affiliate cho sản phẩm [tên sản phẩm]. Vấn đề chính: [vấn đề cụ thể]. Đối tượng: [mô tả người xem]. Viết cho tôi 5 câu Hook bằng tiếng Anh. Mỗi câu dưới 15 chữ. Đánh vào nỗi sợ, sự tò mò hoặc phá vỡ niềm tin thông thường.
+</code></pre>
+<p><em>Prompt 2: Viết Script hoàn chỉnh 6 bước</em></p>
+<pre><code class="language-text">Sử dụng Hook số [chọn 1 số từ kết quả trên]. Viết một script TikTok dài tối đa 100 từ bằng tiếng Anh. Chia rõ 6 phần: Hook, Vấn đề, Nguyên nhân, Giải pháp tự nhiên, Sản phẩm, CTA. Tone giọng điềm tĩnh, chuyên gia, thực tế. Tuyệt đối không dùng từ &quot;Cure&quot; hay &quot;Treat&quot;.
+</code></pre>
+<p><em>Prompt 3: Review và tối ưu Script</em></p>
+<pre><code class="language-text">Hãy đóng vai một chuyên gia conversion rate. Đọc script sau và chỉ ra: Hook đã đủ mạnh chưa? Có bị quá giống quảng cáo (salesy) không? Sửa lại cho tự nhiên hơn nếu cần. Dưới đây là script: [dán script vào]
+</code></pre>
+<p><strong>Higgsfield: Tạo visual xịn</strong></p>
+<p>Khách hàng Mỹ rất thích bối cảnh thực tế. Higgsfield làm việc này rất tốt.</p>
+<p>Quy tắc quan trọng nhất: Hãy mô tả ánh sáng và bối cảnh, đừng mô tả cảm xúc. </p>
+<p>Thay vì nói "video buồn", hãy nói "ánh sáng yếu, tone màu lạnh, một người phụ nữ ngồi trong phòng mờ tối".</p>
+<p><strong>ElevenLabs: Giọng đọc có độ trust cao</strong></p>
+<p>Người nghe chỉ mất 2 giây để nhận ra giọng máy móc và lướt qua. </p>
+<p>ElevenLabs cung cấp giọng đọc có nhấn nhá. Dán script vào. Chọn một giọng trầm ấm. Nó tạo ra sự tin tưởng ngay lập tức. </p>
+<p><strong>HeyGen: Build avatar không cần lộ mặt</strong></p>
+<p>Đây là workflow chuẩn của HeyGen: Bạn vào thư viện Avatar có sẵn của HeyGen, chọn một nhân vật phù hợp (ví dụ bác sĩ mặc áo blouse). </p>
+<p>Tải file âm thanh từ ElevenLabs lên HeyGen. Nó sẽ tự động sync khẩu hình miệng khớp với âm thanh. </p>
+<p>Export video ở tỷ lệ 9:16. Bạn vừa có một diễn viên Mỹ miễn phí 24/7.</p>
+<p><strong>CapCut: Lắp ghép mọi thứ</strong></p>
+<p>Đưa video từ HeyGen vào CapCut. Dùng tính năng Overlay để đè video minh họa (từ Higgsfield) lên khi kịch bản nhắc tới nỗi đau.</p>
+<p>Bật phụ đề tiếng Anh tự động. Chèn một bản nhạc nền nhẹ. Xuất file ở định dạng 1080p, 30fps. </p>
+<blockquote>
+<p><strong>TÓM LẠI 3 Ý CHÍNH:</strong>
+• Dùng 5 công cụ kết hợp: ChatGPT (Script) -&gt; Higgsfield (Visual) -&gt; ElevenLabs (Giọng đọc) -&gt; HeyGen (Avatar) -&gt; CapCut (Edit).
+• Prompt script phải chia rõ cấu trúc 6 phần, đặc biệt tập trung 3 giây Hook đầu tiên.
+• Âm thanh và bối cảnh phải chân thật, không được máy móc để giữ chân người xem người Mỹ.</p>
+</blockquote>
+<hr />
+<h2 id="phan-5-hai-cong-thuc-content-chac-chan-ra-don">Phần 5: Hai Công Thức Content Chắc Chắn Ra Đơn</h2>
+<p>Đừng làm video theo cảm tính. Có hai định dạng đang mang lại hiệu quả tốt nhất hiện nay.</p>
+<p><strong>Bảng so sánh nhanh hai định dạng</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tiêu chí</th>
+<th>Chuyên Gia AI</th>
+<th>GMV Max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Audience</strong></td>
+<td>40 tuổi trở lên</td>
+<td>25 đến 45 tuổi</td>
+</tr>
+<tr>
+<td><strong>Sản phẩm</strong></td>
+<td>Cần trust cao (Tim mạch, Xương khớp)</td>
+<td>Đánh vào thẩm mỹ, rụng tóc, năng lượng</td>
+</tr>
+<tr>
+<td><strong>Nhịp độ</strong></td>
+<td>Chậm, điềm tĩnh</td>
+<td>Dồn dập, chuyển cảnh nhanh (mỗi 2s)</td>
+</tr>
+<tr>
+<td><strong>Độ khó</strong></td>
+<td>Dễ, avatar ngồi nói</td>
+<td>Khó hơn, cần nhiều footage minh họa</td>
+</tr>
+<tr>
+<td><strong>Thời gian làm</strong></td>
+<td>Nhanh</td>
+<td>Lâu hơn do cần tìm b-roll</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Định dạng Chuyên gia AI</strong></p>
+<p>Đây là cách bạn build authority (uy tín). </p>
+<p>Khách hàng mục tiêu là nhóm từ 40 tuổi trở lên. Họ không thích hiệu ứng giật gân. Họ cần sự điềm đạm và logic. </p>
+<p>Hãy để avatar ngồi im, nhìn thẳng vào camera và nói với tông giọng điềm tĩnh. Họ mua hàng vì họ tin vào phong thái đàng hoàng và kiến thức của bạn. </p>
+<p><strong>Định dạng GMV Max</strong></p>
+<p>Dành cho những tệp khách hàng trẻ và quyết định nhanh hơn.</p>
+<p>Cách này tập trung vào sự dồn dập của nỗi đau. Đừng nói vòng vo. Hãy đưa ra một tràng các triệu chứng liên tục ngay từ đầu video. </p>
+<p>Hình ảnh chuyển cảnh nhanh. Khi cảm xúc được đẩy lên cao trào, bạn offer sản phẩm như một chiếc phao cứu sinh. </p>
+<p>Đánh vào cảm xúc luôn là cách chốt sale nhanh nhất. Thứ này quan trọng hơn bạn nghĩ.</p>
+<blockquote>
+<p><strong>TÓM LẠI 3 Ý CHÍNH:</strong>
+• Chuyên Gia AI: Đánh tệp trung niên, chậm rãi, uy tín. Phù hợp các sản phẩm liên quan sức khoẻ.
+• GMV Max: Đánh tệp trẻ, nhịp độ nhanh dồn dập, xoáy sâu nỗi đau liên tục.
+• Chọn đúng định dạng tương ứng với ngách sản phẩm để đẩy tỷ lệ chuyển đổi lên cao nhất.</p>
+</blockquote>
+<hr />
+<h2 id="phan-6-launch-rut-tien-va-checklist">Phần 6: Launch, Rút Tiền Và Checklist</h2>
+<p>Mọi thứ đã sẵn sàng. Nhưng khoan hãy bấm nút đăng.</p>
+<p><strong>Tiêu chí chọn Supplement (Thực phẩm chức năng)</strong></p>
+<p>Supplement là ngách ngon nhất. Bạn nên tập trung vào 5 nhóm này: Hair growth (mọc tóc), Anti-aging (chống lão hóa), Sleep support (hỗ trợ giấc ngủ), Gut health (tiêu hóa), Energy (tăng lực).</p>
+<p>Đừng chọn bừa. Dưới đây là 5 tiêu chí để loại bỏ sản phẩm rác:</p>
+<ol>
+<li>Commission: Trên 20% (bán $30 lãi $6).</li>
+<li>Rating: Trên 4.3 sao.</li>
+<li>Reviews: Có ít nhất 500 lượt đánh giá.</li>
+<li>Giá bán: Nằm trong khoảng $25 đến $60.</li>
+<li>Tồn kho: Phải lớn hơn 3.000 (viral mà hết hàng thì đau lắm).</li>
+</ol>
+<p><strong>Giờ đăng và gắn link chuẩn</strong></p>
+<p>Chỉ gắn link sản phẩm vào video ngay trước khi xuất bản. </p>
+<p>Một ngày đăng 1 đến 2 video. Khung giờ vàng là 7 đến 9 PM EST hoặc 12 đến 2 PM EST. Sự đều đặn quan trọng hơn số lượng.</p>
+<p><strong>3 Cách rút tiền về Việt Nam</strong></p>
+<p>Làm ra tiền rồi thì phải biết cách lấy về. Có 3 đường chính:</p>
+<ol>
+<li><strong>Paypal US</strong>: Dễ tạo, quen thuộc. Nhược điểm là dễ bị khóa nếu tiền về bất thường, phí rút cao. </li>
+<li><strong>Mở LLC tại Mỹ</strong>: Xài thẻ ngân hàng US thật (như Mercury). Ưu điểm là chuẩn chỉ, an toàn tuyệt đối, rút thẳng về bank Việt Nam. Nhược điểm là tốn chi phí mở công ty ban đầu.</li>
+<li><strong>Thuê Agency</strong>: Gắn link qua MCN hoặc Agency. Ưu điểm là không cần lo cổng thanh toán. Nhược điểm là mất phí phần trăm cho họ.</li>
+</ol>
+<p>Nếu xác định làm lớn, hãy mở LLC. Sống đàng hoàng thì mới bền được.</p>
+<p><strong>Checklist Beginner: Những việc phải check trước khi bấm Publish</strong></p>
+<ul>
+<li>[ ] Kênh US đã check whoer.net xanh 100% chưa?</li>
+<li>[ ] Proxy đã gia hạn tháng này chưa?</li>
+<li>[ ] Sản phẩm đã đạt đủ 5 tiêu chí tồn kho, rating, commission chưa?</li>
+<li>[ ] Script và caption có sạch bóng các từ "Cure" hoặc "Treat" không? (Phải thay bằng "Support" hoặc "Help improve").</li>
+<li>[ ] Video đã chọn đúng tỷ lệ 9:16 và xóa sạch logo của tool AI chưa?</li>
+</ul>
+<p>Nếu tất cả đã được tick, hãy tự tin nhấn nút. </p>
+<p>Nói thật, bài học lớn nhất mình rút ra sau nhiều lần mất tiền không phải là giỏi kỹ thuật. Mà là chịu làm và chịu sai để tìm ra quy luật. Bạn chỉ cần làm đúng một vòng, phần còn lại hệ thống sẽ tự chạy.</p>
+<blockquote>
+<p><strong>TÓM LẠI 3 Ý CHÍNH:</strong>
+• Chọn sản phẩm theo 5 tiêu chí vàng: Commission &gt;20%, Rating &gt;4.3, Tồn kho &gt;3000.
+• Rút tiền về an toàn nhất là thông qua LLC.
+• Phải check checklist kỹ càng trước khi bấm Publish để không dính gậy từ TikTok.</p>
+</blockquote>
+<hr />
+<h2 id="faq-nhung-cau-hoi-thuong-gap">FAQ: Những Câu Hỏi Thường Gặp</h2>
+<p><strong>1. TikTok ban tài khoản thì sao?</strong>
+Việc tài khoản bị đình chỉ ở thị trường US là chuyện thường tình như ăn cơm bữa. Hãy chuẩn bị tâm lý. Nếu làm chuẩn quy trình IP, tỷ lệ sống sẽ cao. Bị ban thì kháng cáo, không được thì làm lại account khác. Hãy lì lợm!</p>
+<p><strong>2. Vốn tối thiểu cần bao nhiêu?</strong>
+Tầm 1-2 triệu VNĐ. Dùng để mua Proxy chất lượng và một vài tháng trả phí cho ChatGPT Plus hoặc ElevenLabs.</p>
+<p><strong>3. Bao lâu có đơn đầu tiên?</strong>
+Không ai nói trước được. Có người 3 ngày có đơn, có người 3 tuần. Quan trọng là bạn cải thiện content sau mỗi lần đăng thay vì đổ lỗi cho thuật toán.</p>
+<p><strong>4. Không biết tiếng Anh có làm được không?</strong>
+Được. ChatGPT sẽ viết kịch bản, AI Voice sẽ đọc chuẩn giọng Mỹ. Bạn chỉ cần xài Google Dịch để hiểu nội dung là đủ.</p>
+<p><strong>5. Proxy bao nhiêu tiền/tháng?</strong>
+Proxy tĩnh ISP chuẩn Mỹ dao động từ $3 đến $8 một tháng tuỳ nhà cung cấp.</p>
+<p><strong>6. Phải mở LLC ngay từ đầu không?</strong>
+Không cần thiết. Ban đầu cứ mượn Paypal hoặc Agency để test. Khi nào có dòng tiền đều và lớn (trên $1k/tháng) thì hãy tính chuyện bỏ vài trăm đô mở LLC.</p>
+<p><strong>7. HeyGen/ElevenLabs free hay phải trả tiền?</strong>
+Đều có bản free nhưng sẽ bị dính watermark (logo) hoặc hạn chế tính năng/credit. Muốn làm thương mại chuyên nghiệp thì phải nâng cấp bản trả phí.</p>
+<p><strong>8. Nếu video không lên xu hướng thì sao?</strong>
+Thì phân tích lại! Hook đã đủ gắt chưa? Hình ảnh có sắc nét không? Giọng đọc có tự nhiên không? Sửa dần và lặp lại vòng lặp. Không bỏ cuộc.</p>
+<hr />
+<h2 id="resource-list">Resource List</h2>
+<p>Đây là kho "vũ khí" bạn sẽ cần đến:</p>
+<p><strong>1. Mua Proxy SOCKS5 (Mỹ):</strong></p>
+<ul>
+<li><em>Proxy-Seller</em> (~$3/tháng)</li>
+<li><em>IPRoyal</em> (~$4/tháng)</li>
+<li><em>Oxylabs</em> (Đắt xắt ra miếng, độ trust cao)</li>
+</ul>
+<p><strong>2. HeyGen Avatar IDs (Gợi ý cho US Audience):</strong></p>
+<ul>
+<li>Avatar Bác sĩ nam trung niên (phù hợp bán đồ y tế, xương khớp).</li>
+<li>Avatar Phụ nữ trung niên tóc vàng (chuyên bán mỹ phẩm chống lão hoá).</li>
+<li>Avatar Nam trẻ fitness (chuyên bán TPCN năng lượng/gym).</li>
+</ul>
+<p><strong>3. ElevenLabs Voice IDs:</strong></p>
+<ul>
+<li><em>Marcus</em> (Nam trầm, điềm đạm, cực kỳ đáng tin cậy)</li>
+<li><em>Rachel</em> (Nữ chuyên gia, giọng truyền cảm)</li>
+<li><em>Drew</em> (Nam, giọng tin tức/phóng sự, dồn dập)</li>
+</ul>
+<p><strong>4. Tools Check Đối Thủ / Tìm Sản Phẩm Mẫu:</strong></p>
+<ul>
+<li><em>Pipiads</em> (Theo dõi ads đối thủ).</li>
+<li><em>FastMoss</em> (Kiểm tra xu hướng sản phẩm TikTok).</li>
+</ul>
+<p><strong>5. Cộng đồng hữu ích:</strong></p>
+<ul>
+<li>Reddit <code>r/TikTokShopAffiliate</code></li>
+<li>Các nhóm Facebook nội bộ eCom Global (nhớ lọc thông tin kẻo bị lùa).</li>
+</ul>
+<hr />
+<h2 id="ve-tac-gia">Về Tác Giả</h2>
+<p>Mình là <strong>Tran Thu Nhat</strong>. Xuất phát điểm không phải là dân tiếng Anh, cũng chẳng phải chuyên gia cày views. Mình là một người build hệ thống tự động bằng AI.</p>
+<p>Sau vô số lần ném tiền qua cửa sổ cho quảng cáo và build team nhân sự cồng kềnh, mình nhận ra sự tinh gọn mới là chân ái. Mình đã dùng chính bộ quy trình AI 5 bước này để xây dựng những cỗ máy tự động in tiền từ TikTok US, thu về kết quả bằng USD thật mà không cần lộ mặt lấy một giây.</p>
+<p>Ebook này không được viết để ru ngủ bạn bằng những ảo mộng làm giàu nhanh chóng. Nó được đúc kết từ những đêm thức trắng sửa script bị từ chối, những cái tài khoản bị khoá vô cớ và từ chính sự nhức nhối khi mò mẫm đường đi. </p>
+<p>Nếu bạn cần một người nói thẳng và nói thật về Ecom và AI, chúng ta sẽ hợp nhau. Đừng tốn thời gian than vãn, hãy ngồi xuống và để AI làm nô lệ cho bạn.</p>
+<blockquote>
+<p>🎁 <strong>Quà tặng đặc biệt:</strong> Tham gia cộng đồng Affiliate Thực Chiến của mình. Inbox tôi qua Telegram <strong>@tranthunhat</strong> với cú pháp "TÔI ĐẾN TỪ EBOOK" để nhận thêm 1 bộ template notion quản lý tài khoản TikTok hoàn toàn miễn phí, cùng những update mới nhất về thị trường.</p>
+</blockquote>
+<p>Enjoy cái moment này :)).</p>
+<p>Tran Thu Nhat</p>
+        
+    </div>
+    
+    <script>
+        // Clean up checklist styling visually
+        document.querySelectorAll('li').forEach(li => {
+            if (li.textContent.includes('[ ]')) {
+                li.innerHTML = li.innerHTML.replace('[ ]', '⬜ ');
+                li.style.listStyleType = 'none';
+            }
+            if (li.textContent.includes('[-]')) {
+                li.innerHTML = li.innerHTML.replace('[-]', '✅ ');
+                li.style.listStyleType = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

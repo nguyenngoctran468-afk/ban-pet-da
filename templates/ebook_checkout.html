@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh Toán - {{ product.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #6366f1;
+      --color-secondary: #a855f7;
+      --color-accent: #f59e0b;
+      --color-bg: #0f172a;
+      --color-card: #1e293b;
+      --color-text: #f8fafc;
+      --color-muted: #94a3b8;
+      --font-main: 'Inter', sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .checkout-card {
+      background: var(--color-card);
+      width: 100%;
+      max-width: 500px;
+      padding: 40px;
+      border-radius: 32px;
+      border: 1px solid var(--color-primary);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 10px; text-align: center; }
+    .subtitle { text-align: center; color: var(--color-muted); margin-bottom: 30px; }
+
+    .product-info {
+        background: rgba(99, 102, 241, 0.1);
+        padding: 20px;
+        border-radius: 16px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .price { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); }
+
+    input {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 20px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 18px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #step2-qr { display: none; text-align: center; }
+    .qr-image { max-width: 250px; border-radius: 16px; background: white; padding: 10px; margin: 20px 0; }
+    .order-id-box { background: #0f172a; padding: 10px; border-radius: 8px; font-weight: 800; color: white; display: inline-block; }
+  </style>
+</head>
+
+<body>
+  <div class="checkout-card">
+    <div id="step1-form">
+        <h2>Thanh Toán</h2>
+        <p class="subtitle">Hoàn tất thông tin để nhận link tải ebook</p>
+
+        <div class="product-info">
+            <span>{{ product.name }}</span>
+            <span class="price">{{ "{:,.0f}".format(product.price) }}đ</span>
+        </div>
+
+        <form id="checkoutForm">
+            <input type="text" id="name" placeholder="Họ và tên" required>
+            <input type="email" id="email" placeholder="Email nhận file" required>
+            <input type="tel" id="phone" placeholder="Số điện thoại" required>
+            <button type="submit" id="submitBtn" class="btn">TIẾP TỤC THANH TOÁN</button>
+        </form>
+    </div>
+
+    <div id="step2-qr">
+        <h2>Quét Mã QR</h2>
+        <p class="subtitle">Dùng app ngân hàng để quét mã bên dưới</p>
+        
+        <img id="qr-image" class="qr-image" src="" alt="QR">
+        
+        <p style="margin-bottom: 10px;">Nội dung chuyển khoản:</p>
+        <div class="order-id-box" id="display-order-id">---</div>
+        
+        <p style="margin-top: 20px; font-size: 0.9rem; color: var(--color-muted);">
+            Hệ thống sẽ tự động xác nhận sau 10-30s.<br>Vui lòng không đóng trang này.
+        </p>
+    </div>
+  </div>
+
+  <script>
+    let currentOrderId = null;
+    let pollInterval = null;
+    let userEmail = '';
+
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerText = "Đang khởi tạo...";
+
+      userEmail = document.getElementById('email').value;
+      const data = {
+        name: document.getElementById('name').value,
+        email: userEmail,
+        phone: document.getElementById('phone').value,
+        product_id: 3 // Ebook ID
+      };
+
+      try {
+        const res = await fetch('/api/create_order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          currentOrderId = result.order_id;
+          document.getElementById('step1-form').style.display = 'none';
+          document.getElementById('step2-qr').style.display = 'block';
+          document.getElementById('display-order-id').innerText = result.description;
+          
+          const qrUrl = `https://qr.sepay.vn/img?acc=10003821008&bank=TPBank&amount=${result.amount}&des=${result.description}`;
+          document.getElementById('qr-image').src = qrUrl;
+
+          pollInterval = setInterval(checkStatus, 3000);
+        } else {
+          alert('Lỗi: ' + result.message);
+          btn.disabled = false;
+          btn.innerText = "TIẾP TỤC THANH TOÁN";
+        }
+      } catch (err) {
+        alert("Có lỗi kết nối. Thử lại sau.");
+        btn.disabled = false;
+      }
+    });
+
+    async function checkStatus() {
+      try {
+        const res = await fetch(`/api/check_order/${currentOrderId}`);
+        const result = await res.json();
+        if (result.success && result.status === 'success') {
+          clearInterval(pollInterval);
+          window.location.href = `/san-pham/ai-affiliate-blueprint/cam-on?order_id=${currentOrderId}&email=${encodeURIComponent(userEmail)}`;
+        }
+      } catch (e) {}
+    }
+  </script>
+</body>
+
+</html>

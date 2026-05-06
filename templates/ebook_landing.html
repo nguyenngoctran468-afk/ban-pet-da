@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Affiliate Blueprint - Kiếm USD Từ TikTok US Bằng AI</title>
+  <meta name="description"
+    content="Quy trình 100% AI giúp bạn xây dựng kênh TikTok Affiliate tại Mỹ, kiếm hoa hồng USD mà không cần lộ mặt hay giỏi tiếng Anh.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #6366f1;
+      --color-secondary: #a855f7;
+      --color-accent: #f59e0b;
+      --color-bg: #0f172a;
+      --color-card: #1e293b;
+      --color-text: #f8fafc;
+      --color-muted: #94a3b8;
+      --font-main: 'Inter', sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navbar */
+    nav {
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 1.5rem;
+      background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 100px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid var(--color-primary);
+      border-radius: 99px;
+      color: var(--color-primary);
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      background: linear-gradient(to bottom, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--color-muted);
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 18px 36px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 30px -10px rgba(99, 102, 241, 0.6);
+    }
+
+    /* Pain Points */
+    .pain-section {
+      padding: 80px 0;
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .pain-card {
+      background: var(--color-card);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .pain-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color: var(--color-accent);
+    }
+
+    /* Product Details */
+    .chapters {
+      padding: 100px 0;
+    }
+
+    .chapter-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .chapter-item {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      align-items: flex-start;
+    }
+
+    .chapter-number {
+      background: var(--color-primary);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Target Audience */
+    .audience-section {
+      padding: 80px 0;
+      background: rgba(30, 41, 59, 0.3);
+      text-align: center;
+    }
+
+    .author-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .price-box {
+      background: var(--color-card);
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--color-primary);
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 0;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--color-muted);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 3rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <a href="#" class="logo">AI BLUEPRINT</a>
+      <a href="/san-pham/{{ slug }}/checkout" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">SỞ HỮU NGAY</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">PHƯƠNG PHÁP MỚI 2026</div>
+      <h1>Biến AI Thành "Cỗ Máy" Kiếm USD Từ TikTok US</h1>
+      <p>Hành trình từ con số 0 đến những đồng hoa hồng USD đầu tiên. Quy trình 100% AI: Không lộ mặt, không cần giỏi Tiếng Anh, không cần vốn nhập hàng.</p>
+      <a href="/san-pham/{{ slug }}/checkout" class="btn btn-primary">BẮT ĐẦU KIẾM TIỀN NGAY</a>
+    </div>
+  </section>
+
+  <section class="pain-section">
+    <div class="container">
+      <h2 class="section-title">Họ nhận được gì?</h2>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <h3>Tư duy hệ thống</h3>
+          <p>Hiểu luật chơi của thị trường Global, cách dòng tiền vận hành thay vì đăng video mù quáng.</p>
+        </div>
+        <div class="pain-card">
+          <h3>SOP 5 Tool AI</h3>
+          <p>Quy trình kết hợp ChatGPT, HeyGen, ElevenLabs tạo video chốt sale tự động trong vài phút.</p>
+        </div>
+        <div class="pain-card">
+          <h3>Checklist Vàng</h3>
+          <p>Cách nuôi tài khoản tàng hình chuẩn US, lách kiểm duyệt và rút tiền an toàn về Việt Nam qua LLC.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="audience-section">
+    <div class="container">
+      <h2 class="section-title">Dành cho ai?</h2>
+      <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+        <ul style="list-style: none;">
+          <li style="margin-bottom: 20px; padding-left: 30px; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--color-accent); font-weight: bold;">✓</span>
+            <b>Dân văn phòng:</b> Muốn có thêm một dòng thu nhập phụ tự động mà không cần lộ mặt.
+          </li>
+          <li style="margin-bottom: 20px; padding-left: 30px; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--color-accent); font-weight: bold;">✓</span>
+            <b>Freelancer/Editor:</b> Chán cảnh cày thuê mòn mỏi, muốn làm chủ tài nguyên của chính mình.
+          </li>
+          <li style="margin-bottom: 20px; padding-left: 30px; position: relative;">
+            <span style="position: absolute; left: 0; color: var(--color-accent); font-weight: bold;">✓</span>
+            <b>Chủ Shop:</b> Muốn mở rộng tập khách hàng sang thị trường sức mua lớn nhất thế giới.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="author-section">
+    <div class="container">
+      <h2 class="section-title">Về tác giả</h2>
+      <p style="max-width: 600px; margin: 0 auto; color: var(--color-muted); font-size: 1.1rem;">
+        Mình là <b>Tran Thu Nhat</b>. Từng ném hàng đống tiền qua cửa sổ vì làm affiliate theo cảm tính, giờ đây mình đúc kết lại thành hệ thống 5 bước AI tinh gọn giúp tự động hóa toàn bộ quy trình kiếm tiền trên TikTok US. Không vẽ vời, chỉ có thực chiến.
+      </p>
+      
+      <div class="price-box">
+        <h3 style="font-size: 2rem; color: var(--color-accent); margin-bottom: 10px;">{{ "{:,.0f}".format(product.price) }}đ</h3>
+        <p style="margin-bottom: 30px; color: var(--color-muted);">File giao ngay qua email sau khi thanh toán.</p>
+        <a href="/san-pham/{{ slug }}/checkout" class="btn btn-primary" style="width: 100%; display: block;">MUA NGAY - TẢI FILE TỨC THÌ</a>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #64748b;">🔒 Thanh toán an toàn tự động qua Sepay</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 AI Affiliate Blueprint. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+</html>
