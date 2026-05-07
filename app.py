@@ -11,6 +11,69 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# ==========================================
+# CẤU HÌNH EMAIL TEMPLATES (ĐỂ LÊN ĐẦU CHO CHẮC CHẮN)
+# ==========================================
+EMAIL_TEMPLATES = {
+    "welcome": {
+        "subject": "🚀 Chào mừng bạn đến với lộ trình AI Affiliate US!",
+        "content": """
+        <p>Chào bạn,</p>
+        <p>Cảm ơn bạn đã quan tâm đến lộ trình xây dựng thu nhập thụ động từ TikTok Shop US bằng AI.</p>
+        <p>Trong vài ngày tới, mình sẽ gửi cho bạn những tài liệu quan trọng để bạn hiểu rõ thị trường này tiềm năng như thế nào.</p>
+        <br>
+        <p>Thân ái,<br><b>Team AI Affiliate</b></p>
+        """
+    },
+    "nurture": {
+        "subject": "📈 Tại sao 2026 là 'Thời điểm vàng' cho TikTok Shop US?",
+        "content": """
+        <p>Chào bạn,</p>
+        <p>Bạn có biết hàng ngàn người Việt đang âm thầm kiếm hàng nghìn USD mỗi tháng nhờ AI không?</p>
+        <p>Bí quyết nằm ở việc sử dụng AI để sản xuất nội dung hàng loạt mà không cần lộ mặt. Mình sẽ chia sẻ kỹ hơn trong email tiếp theo nhé.</p>
+        <br>
+        <p>Hẹn gặp bạn,<br><b>Team AI Affiliate</b></p>
+        """
+    },
+    "sales": {
+        "subject": "🎁 Ưu đãi đặc biệt: Sở hữu trọn bộ AI Affiliate Blueprint",
+        "content": """
+        <p>Chào bạn,</p>
+        <p>Cơ hội để bạn sở hữu toàn bộ quy trình đã được đóng gói sẵn đang ở ngay đây.</p>
+        <p>👉 <b><a href='https://phaodr.com/san-pham/ai-affiliate-blueprint'>XEM CHI TIẾT TẠI ĐÂY</a></b></p>
+        <br>
+        <p>Hẹn gặp bạn ở vạch đích,<br><b>Team AI Affiliate</b></p>
+        """
+    },
+    "ebook_delivery": {
+        "subject": "🔥 [DOWNLOAD] Bản thiết kế AI Affiliate Blueprint của bạn đây!",
+        "content": """
+        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #6366f1;">Chúc mừng bạn đã sở hữu AI Affiliate Blueprint!</h2>
+            <p>Chào bạn, tấm vé thông hành vào thị trường TikTok US đã nằm trong tay bạn. Đây là bước ngoặt để bạn bắt đầu kiếm thu nhập bằng USD với sự trợ giúp của AI.</p>
+            
+            <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 20px 0;">
+                <h3 style="margin-top: 0;">📦 Link Tải Tài Liệu:</h3>
+                <p>Bạn có thể tải về máy trực tiếp tại đây (link có hiệu lực vĩnh viễn):</p>
+                <a href="https://phaodr.com/api/download/ebook?order_id={order_id}&email={email}" style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">TẢI EBOOK (.PDF)</a>
+            </div>
+
+            <h3>🎁 Quà tặng kèm theo (Bonus):</h3>
+            <ul>
+                <li><b>Checklist 20 lỗi bay nick:</b> Đã đính kèm trong Ebook.</li>
+                <li><b>Top 10 sản phẩm Supplement:</b> Xem tại Chương 6.</li>
+                <li><b>Bộ Prompt AI độc quyền:</b> Xem tại Chương 4.</li>
+            </ul>
+
+            <p>Nếu gặp khó khăn trong quá trình tải file hoặc setup, hãy nhắn tin ngay cho Support trong nhóm Zalo nhé.</p>
+            <p>Hẹn gặp bạn ở vạch đích!</p>
+            <br>
+            <p>Thân ái,<br><b>Team AI Affiliate</b></p>
+        </div>
+        """
+    }
+}
+
 app = Flask(__name__)
 CORS(app)
 
@@ -242,8 +305,9 @@ def update_order(id):
         prod = supabase_get('products', f'id=eq.{product_id}')
         if prod and isinstance(prod, list) and len(prod) > 0:
             current_stock = int(prod[0].get('stock', 0))
-            if status == 'success' and old_status != 'success':
-                supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
+            if status == 'success': # Cho phép gửi lại nếu Admin bấm Success lần nữa
+                if old_status != 'success':
+                    supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
                 
                 # GIAO HÀNG TỰ ĐỘNG NẾU LÀ EBOOK (ID: 3)
                 if int(product_id) == 3:
@@ -251,11 +315,13 @@ def update_order(id):
                     if customer and len(customer) > 0:
                         target_email = customer[0].get('email')
                         if target_email:
+                            print(f">>> [ADMIN UPDATE] Đang gửi Ebook tới {target_email}...")
                             email_content = EMAIL_TEMPLATES["ebook_delivery"]["content"].format(
                                 order_id=id, 
                                 email=target_email
                             )
                             send_email(target_email, EMAIL_TEMPLATES["ebook_delivery"]["subject"], email_content)
+                            print(f">>> [ADMIN UPDATE] Đã gửi xong.")
             elif status != 'success' and old_status == 'success':
                 supabase_update('products', 'id', product_id, {"stock": current_stock + 1})
                 
@@ -462,65 +528,7 @@ def download_ebook():
 # ==========================================
 # EMAIL SEQUENCE LOGIC
 # ==========================================
-EMAIL_TEMPLATES = {
-    "welcome": {
-        "subject": "🚀 Chào mừng bạn đến với lộ trình AI Affiliate US!",
-        "content": """
-        <p>Chào bạn,</p>
-        <p>Cảm ơn bạn đã quan tâm đến lộ trình xây dựng thu nhập thụ động từ TikTok Shop US bằng AI.</p>
-        <p>Trong vài ngày tới, mình sẽ gửi cho bạn những tài liệu quan trọng để bạn hiểu rõ thị trường này tiềm năng như thế nào.</p>
-        <br>
-        <p>Thân ái,<br><b>Team AI Affiliate</b></p>
-        """
-    },
-    "nurture": {
-        "subject": "📈 Tại sao 2026 là 'Thời điểm vàng' cho TikTok Shop US?",
-        "content": """
-        <p>Chào bạn,</p>
-        <p>Bạn có biết hàng ngàn người Việt đang âm thầm kiếm hàng nghìn USD mỗi tháng nhờ AI không?</p>
-        <p>Bí quyết nằm ở việc sử dụng AI để sản xuất nội dung hàng loạt mà không cần lộ mặt. Mình sẽ chia sẻ kỹ hơn trong email tiếp theo nhé.</p>
-        <br>
-        <p>Hẹn gặp bạn,<br><b>Team AI Affiliate</b></p>
-        """
-    },
-    "sales": {
-        "subject": "🎁 Ưu đãi đặc biệt: Sở hữu trọn bộ AI Affiliate Blueprint",
-        "content": """
-        <p>Chào bạn,</p>
-        <p>Cơ hội để bạn sở hữu toàn bộ quy trình đã được đóng gói sẵn đang ở ngay đây.</p>
-        <p>👉 <b><a href='https://phaodr.com/san-pham/ai-affiliate-blueprint'>XEM CHI TIẾT TẠI ĐÂY</a></b></p>
-        <br>
-        <p>Hẹn gặp bạn ở vạch đích,<br><b>Team AI Affiliate</b></p>
-        """
-    },
-    "ebook_delivery": {
-        "subject": "🔥 [DOWNLOAD] Bản thiết kế AI Affiliate Blueprint của bạn đây!",
-        "content": """
-        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-            <h2 style="color: #6366f1;">Chúc mừng bạn đã sở hữu AI Affiliate Blueprint!</h2>
-            <p>Chào bạn, tấm vé thông hành vào thị trường TikTok US đã nằm trong tay bạn. Đây là bước ngoặt để bạn bắt đầu kiếm thu nhập bằng USD với sự trợ giúp của AI.</p>
-            
-            <div style="background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 20px 0;">
-                <h3 style="margin-top: 0;">📦 Link Tải Tài Liệu:</h3>
-                <p>Bạn có thể tải về máy trực tiếp tại đây (link có hiệu lực vĩnh viễn):</p>
-                <a href="https://phaodr.com/api/download/ebook?order_id={order_id}&email={email}" style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">TẢI EBOOK (.PDF)</a>
-            </div>
-
-            <h3>🎁 Quà tặng kèm theo (Bonus):</h3>
-            <ul>
-                <li><b>Checklist 20 lỗi bay nick:</b> Đã đính kèm trong Ebook.</li>
-                <li><b>Top 10 sản phẩm Supplement:</b> Xem tại Chương 6.</li>
-                <li><b>Bộ Prompt AI độc quyền:</b> Xem tại Chương 4.</li>
-            </ul>
-
-            <p>Nếu gặp khó khăn trong quá trình tải file hoặc setup, hãy nhắn tin ngay cho Support trong nhóm Zalo nhé.</p>
-            <p>Hẹn gặp bạn ở vạch đích!</p>
-            <br>
-            <p>Thân ái,<br><b>Team AI Affiliate</b></p>
-        </div>
-        """
-    }
-}
+# (Templates moved to top)
 
 def trigger_email_sequence(email, name):
     is_test = "+test" in email.lower()
