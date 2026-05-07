@@ -401,15 +401,17 @@ def webhook_sepay():
 def admin_resend_test():
     test_email = "nguyenngoctran468@gmail.com" # Email chính chủ
     
-    # Gửi cả 3 email sequence luôn để bạn kiểm tra
-    s1 = send_email(test_email, EMAIL_TEMPLATES["welcome"]["subject"], EMAIL_TEMPLATES["welcome"]["content"])
-    s2 = send_email(test_email, EMAIL_TEMPLATES["nurture"]["subject"], EMAIL_TEMPLATES["nurture"]["content"])
-    s3 = send_email(test_email, EMAIL_TEMPLATES["sales"]["subject"], EMAIL_TEMPLATES["sales"]["content"])
+    # Test mẫu email giao Ebook mới
+    email_content = EMAIL_TEMPLATES["ebook_delivery"]["content"].format(
+        order_id="TEST_123", 
+        email=test_email
+    )
+    success = send_email(test_email, EMAIL_TEMPLATES["ebook_delivery"]["subject"], email_content)
     
-    if s1 and s2 and s3:
-        return f"<h3>Thành công! Đã gửi cả 3 email trong Sequence tới {test_email}</h3><a href='/admin?tab=customers'>Quay lại Admin</a>"
+    if success:
+        return f"<h3>Thành công! Đã gửi Email Giao Ebook tới {test_email}</h3><p>Vui lòng kiểm tra hòm thư của bạn.</p><a href='/admin?tab=orders'>Quay lại Admin</a>"
     else:
-        return f"<h3>Có lỗi xảy ra (Ít nhất 1 email thất bại).</h3><p>Hãy kiểm tra Logs hoặc Env Var.</p><a href='/admin?tab=customers'>Quay lại Admin</a>"
+        return f"<h3>Lỗi gửi mail!</h3><p>Hãy kiểm tra Logs hoặc API Key trong .env.</p><a href='/admin?tab=orders'>Quay lại Admin</a>"
 
 # ------------- SẢN PHẨM SỐ (EBOOK) -------------
 @app.route('/san-pham/<slug>')
