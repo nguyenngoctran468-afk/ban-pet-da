@@ -244,6 +244,18 @@ def update_order(id):
             current_stock = int(prod[0].get('stock', 0))
             if status == 'success' and old_status != 'success':
                 supabase_update('products', 'id', product_id, {"stock": current_stock - 1})
+                
+                # GIAO HÀNG TỰ ĐỘNG NẾU LÀ EBOOK (ID: 3)
+                if int(product_id) == 3:
+                    customer = supabase_get('customers', f"id=eq.{order[0].get('customer_id')}")
+                    if customer and len(customer) > 0:
+                        target_email = customer[0].get('email')
+                        if target_email:
+                            email_content = EMAIL_TEMPLATES["ebook_delivery"]["content"].format(
+                                order_id=id, 
+                                email=target_email
+                            )
+                            send_email(target_email, EMAIL_TEMPLATES["ebook_delivery"]["subject"], email_content)
             elif status != 'success' and old_status == 'success':
                 supabase_update('products', 'id', product_id, {"stock": current_stock + 1})
                 
