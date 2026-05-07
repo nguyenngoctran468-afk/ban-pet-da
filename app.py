@@ -464,42 +464,33 @@ def download_ebook():
 # ==========================================
 EMAIL_TEMPLATES = {
     "welcome": {
-        "subject": "🎉 Chào mừng bạn gia nhập Hội Những Người Nuôi Đá Vô Tri!",
+        "subject": "🚀 Chào mừng bạn đến với lộ trình AI Affiliate US!",
         "content": """
-        <p>Chào bạn, chủ nhân tương lai!</p>
-        <p>Bạn vừa chính thức đặt một chân vào thế giới của sự tĩnh lặng tuyệt đối (mình nói thiệt á, nó hông kêu, hông sủa, hông đòi ăn, hông làm gì hết).</p>
-        <p>Cảm ơn bạn đã tin tưởng mình và "bé đá" tương lai. Trong vài ngày tới, mình sẽ kể cho bạn nghe tại sao hàng ngàn Gen Z lại chọn nuôi đá để giải nghiệp chốn công sở nhé.</p>
-        <p>Đừng quên kiểm tra inbox thường xuyên, mình có chuẩn bị vài điều "vô tri nhưng hữu ích" dành riêng cho bạn đó.</p>
+        <p>Chào bạn,</p>
+        <p>Cảm ơn bạn đã quan tâm đến lộ trình xây dựng thu nhập thụ động từ TikTok Shop US bằng AI.</p>
+        <p>Trong vài ngày tới, mình sẽ gửi cho bạn những tài liệu quan trọng để bạn hiểu rõ thị trường này tiềm năng như thế nào.</p>
         <br>
-        <p>Thân ái,<br><b>Team Pet Đá</b></p>
+        <p>Thân ái,<br><b>Team AI Affiliate</b></p>
         """
     },
     "nurture": {
-        "subject": "🧘 Bí kíp 'Tịnh Tâm' 0đ ngay tại bàn làm việc",
+        "subject": "📈 Tại sao 2026 là 'Thời điểm vàng' cho TikTok Shop US?",
         "content": """
         <p>Chào bạn,</p>
-        <p>Bạn đã bao giờ định chửi sếp nhưng rồi lại phải nuốt cục tức vào trong chưa? Hay bị dí deadline đến mức muốn hóa đá luôn cho rồi?</p>
-        <p>Bí quyết của những "con sen" hệ đá chính là: <b>Lôi bé đá ra chửi thẳng mặt.</b></p>
-        <p>Nó sẽ im lặng chịu trận 24/7, hông bao giờ mách lẻo, hông bao giờ phán xét. Đó là sự trị liệu tâm lý đỉnh cao mà không có con mèo hay con chó nào làm được.</p>
-        <p>Chỉ cần ngồi im lặng cùng nó 2 phút mỗi khi stress, bạn sẽ thấy deadline cũng chỉ là những hạt cát thôi.</p>
+        <p>Bạn có biết hàng ngàn người Việt đang âm thầm kiếm hàng nghìn USD mỗi tháng nhờ AI không?</p>
+        <p>Bí quyết nằm ở việc sử dụng AI để sản xuất nội dung hàng loạt mà không cần lộ mặt. Mình sẽ chia sẻ kỹ hơn trong email tiếp theo nhé.</p>
         <br>
-        <p>Chúc bạn một ngày làm việc bớt nghiệp,<br><b>Team Pet Đá</b></p>
+        <p>Hẹn gặp bạn,<br><b>Team AI Affiliate</b></p>
         """
     },
     "sales": {
-        "subject": "🪨 Cơ hội đón 'Bé Đá Cưng' về dinh (Lô này chỉ còn vài bé!)",
+        "subject": "🎁 Ưu đãi đặc biệt: Sở hữu trọn bộ AI Affiliate Blueprint",
         "content": """
         <p>Chào bạn,</p>
-        <p>Lô đá 'lỳ lợm' đợt này của mình đang vơi dần rồi, hiện tại chỉ còn vài bé Đá Cưng (79k) chờ được bế về thôi.</p>
-        <p>Tại sao bạn nên chốt ngay?</p>
-        <ul>
-            <li><b>Độc bản:</b> Mỗi bé là một vibe khác nhau.</li>
-            <li><b>An toàn:</b> Đóng gói cực sang chảnh, ship tới văn phòng ai cũng tưởng đồ hiệu.</li>
-            <li><b>Giá rẻ:</b> Chỉ bằng 2 ly trà đào, mà mua được một 'người lắng nghe' tận tụy cả đời.</li>
-        </ul>
-        <p>👉 <b><a href='https://ban-pet-da.onrender.com/checkout'>ĐẶT HÀNG TẠI ĐÂY</a></b></p>
+        <p>Cơ hội để bạn sở hữu toàn bộ quy trình đã được đóng gói sẵn đang ở ngay đây.</p>
+        <p>👉 <b><a href='https://phaodr.com/san-pham/ai-affiliate-blueprint'>XEM CHI TIẾT TẠI ĐÂY</a></b></p>
         <br>
-        <p>Hẹn gặp bạn và bé đá của bạn,<br><b>Team Pet Đá</b></p>
+        <p>Hẹn gặp bạn ở vạch đích,<br><b>Team AI Affiliate</b></p>
         """
     },
     "ebook_delivery": {
