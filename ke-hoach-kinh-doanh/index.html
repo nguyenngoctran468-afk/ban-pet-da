@@ -128,6 +128,12 @@
             letter-spacing: 1px;
         }
 
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         .btn-primary {
             background: var(--primary);
             color: #000;
@@ -308,20 +314,13 @@
             }
             nav a { margin: 0 0.5rem; font-size: 0.7rem; }
             
-            #hero h1 { font-size: 2.8rem; line-height: 1.1; }
-            #hero p { font-size: 1.1rem; }
+            #hero h1 { font-size: 2.2rem; line-height: 1.1; margin-bottom: 1rem; }
+            #hero p { font-size: 1rem; margin-bottom: 2rem; }
             
-            h2 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; margin-bottom: 1.5rem; }
             
-            .money-grid, .asks-grid, .asset-grid {
-                grid-template-columns: 1fr !important;
-            }
-            
-            .btn { width: 100%; text-align: center; padding: 1rem; }
-            
-            .offer-box { padding: 1.5rem; }
-            .offer-box div { flex-direction: column; }
-            .offer-box .btn { margin-bottom: 0.5rem; }
+            .btn-group { flex-direction: column !important; width: 100%; }
+            .btn-group .btn { width: 100%; margin-bottom: 0.5rem; }
         }
 
         @media (max-width: 900px) {
@@ -430,7 +429,7 @@
             <div class="offer-box">
                 <h3 style="margin-bottom: 1rem; color: var(--primary);">Grand Slam Offer: 397k</h3>
                 <p style="color: var(--text-dim); margin-bottom: 1.5rem;">Ebook + 4 Bonus (Checklist, 10 Prompts, 50 Niche List, Community access) + Cam kết hoàn tiền 100% trong 7 ngày.</p>
-                <div style="display: flex; gap: 1rem;">
+                <div class="btn-group">
                     <a href="/ke-hoach/04-money-model.html" class="btn btn-outline">MONEY MODEL</a>
                     <a href="/ke-hoach/05-offer.html" class="btn btn-outline">OFFER DETAIL</a>
                 </div>
@@ -446,7 +445,7 @@
             <div class="funnel-container">
                 <iframe src="/ke-hoach/07-funnel-visual.html" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
-            <div style="display: flex; gap: 1rem;">
+            <div class="btn-group">
                 <a href="/ke-hoach/07-funnel-blueprint.html" class="btn btn-outline">VIEW BLUEPRINT</a>
                 <a href="/ke-hoach/06-hvco-leadmagnet.html" class="btn btn-outline">VIEW LEAD MAGNET</a>
             </div>
