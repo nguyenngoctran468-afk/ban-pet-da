@@ -100,6 +100,17 @@ def supabase_get(table, params=""):
     res = requests.get(url, headers=headers)
     return res.json() if res.status_code == 200 else []
 
+# ==========================================
+# ROUTES CHO BẢN KẾ HOẠCH KINH DOANH (DAY 20)
+# ==========================================
+@app.route('/ke-hoach')
+def serve_ke_hoach_index():
+    return send_from_directory('ke-hoach-kinh-doanh', 'index.html')
+
+@app.route('/ke-hoach/<path:filename>')
+def serve_ke_hoach_files(filename):
+    return send_from_directory('ke-hoach-kinh-doanh', filename)
+
 def supabase_insert(table, data):
     url = f"{SUPABASE_URL}/rest/v1/{table}"
     res = requests.post(url, headers=headers, json=data)

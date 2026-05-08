@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Funnel Visual — Phaodr</title>
+    <style>
+        body { background: #050505; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Inter', sans-serif; }
+        .funnel-wrapper { display: flex; align-items: center; gap: 20px; }
+        .step {
+            width: 160px;
+            height: 100px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .step:hover { border-color: #00ff88; transform: translateY(-5px); }
+        .step-icon { font-size: 1.5rem; margin-bottom: 5px; }
+        .step-label { color: #fff; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
+        .step-sub { color: #666; font-size: 0.6rem; margin-top: 2px; }
+        .arrow { width: 40px; height: 2px; background: linear-gradient(to right, #00ff88, #4f46e5); position: relative; }
+        .arrow::after { content: ""; position: absolute; right: 0; top: -4px; border-left: 6px solid #4f46e5; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+        
+        .step.highlight { border-color: #4f46e5; box-shadow: 0 0 20px rgba(79, 70, 229, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="funnel-wrapper">
+        <div class="step">
+            <div class="step-icon">📱</div>
+            <div class="step-label">Traffic Ads</div>
+            <div class="step-sub">TikTok / Facebook</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="step">
+            <div class="step-icon">🎁</div>
+            <div class="step-label">Lead Magnet</div>
+            <div class="step-sub">HVCO Opt-in</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="step highlight">
+            <div class="step-icon">💎</div>
+            <div class="step-label">Sales Page</div>
+            <div class="step-sub">Ebook 397k</div>
+        </div>
+        <div class="arrow"></div>
+        <div class="step">
+            <div class="step-icon">📧</div>
+            <div class="step-label">Email Flow</div>
+            <div class="step-sub">Nurture & Upsell</div>
+        </div>
+    </div>
+</body>
+</html>
