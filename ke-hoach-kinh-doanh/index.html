@@ -277,12 +277,50 @@
             background: var(--glass);
             border: 1px solid var(--border);
         }
+}
 
         .ask-box.warning { border-color: rgba(255, 0, 0, 0.3); }
 
         footer {
             padding: 10rem 2rem;
             text-align: center;
+        }
+
+        /* Section Content Mobile */
+        .section-content {
+            background: var(--surface);
+            padding: 2rem 1.5rem; /* Reduced padding for mobile */
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            nav {
+                padding: 1rem;
+                overflow-x: auto;
+                justify-content: flex-start;
+                white-space: nowrap;
+            }
+            nav a { margin: 0 0.5rem; font-size: 0.7rem; }
+            
+            #hero h1 { font-size: 2.8rem; line-height: 1.1; }
+            #hero p { font-size: 1.1rem; }
+            
+            h2 { font-size: 2.2rem; }
+            
+            .money-grid, .asks-grid, .asset-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .btn { width: 100%; text-align: center; padding: 1rem; }
+            
+            .offer-box { padding: 1.5rem; }
+            .offer-box div { flex-direction: column; }
+            .offer-box .btn { margin-bottom: 0.5rem; }
         }
 
         @media (max-width: 900px) {
@@ -327,7 +365,7 @@
             <div class="quote-box">
                 "Họ là những người muốn kiếm USD nhưng bị rào cản ngôn ngữ và sự tự ti ngăn bước. Họ cần một quy trình 'tàng hình' để AI làm thay mọi việc khó nhất."
             </div>
-            <a href="01-avatar.html" target="_blank" class="btn btn-outline">View full avatar</a>
+            <a href="/ke-hoach/01-avatar.html" class="btn btn-outline">View full avatar</a>
         </div>
     </section>
 
@@ -339,11 +377,11 @@
             <div class="summary-text">
                 Không hoa mỹ, không đa cấp. Chúng ta nói chuyện như những người giàu và sống đàng hoàng. Ngắn gọn, súc tích và luôn "Enjoy cái moment này :))."
             </div>
-            <div style="background: rgba(0, 255, 136, 0.05); padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+            <div style="background: rgba(0, 255, 136, 0.05); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
                 <p><strong>Ví dụ 1:</strong> "Làm TikTok US không khó, cái khó là bạn có dám 'tàng hình' không thôi :))."</p>
                 <p style="margin-top: 1rem;"><strong>Ví dụ 2:</strong> "USD không tự chảy vào túi, nhưng AI sẽ giúp bạn mở vòi nước đó."</p>
             </div>
-            <a href="02-brand-voice.html" target="_blank" class="btn btn-outline">View brand voice</a>
+            <a href="/ke-hoach/02-brand-voice.html" class="btn btn-outline">View brand voice</a>
         </div>
     </section>
 
@@ -360,7 +398,7 @@
                 <li>AI Production: Video chuẩn Mỹ mà không cần lộ mặt.</li>
                 <li>AI Launch: Vận hành tự động để dòng tiền USD chảy về.</li>
             </ul>
-            <a href="03-hero-mechanism.html" target="_blank" class="btn btn-outline">View mechanism</a>
+            <a href="/ke-hoach/03-hero-mechanism.html" class="btn btn-outline">View mechanism</a>
         </div>
     </section>
 
@@ -392,8 +430,8 @@
                 <h3 style="margin-bottom: 1rem; color: var(--primary);">Grand Slam Offer: 397k</h3>
                 <p style="color: var(--text-dim); margin-bottom: 1.5rem;">Ebook + 4 Bonus (Checklist, 10 Prompts, 50 Niche List, Community access) + Cam kết hoàn tiền 100% trong 7 ngày.</p>
                 <div style="display: flex; gap: 1rem;">
-                    <a href="04-money-model.html" target="_blank" class="btn btn-outline">Money Model</a>
-                    <a href="05-offer.html" target="_blank" class="btn btn-outline">Offer Detail</a>
+                    <a href="/ke-hoach/04-money-model.html" class="btn btn-outline">MONEY MODEL</a>
+                    <a href="/ke-hoach/05-offer.html" class="btn btn-outline">OFFER DETAIL</a>
                 </div>
             </div>
         </div>
@@ -405,11 +443,11 @@
             <span class="section-label">06-07 · The Journey</span>
             <h2>Bản đồ phễu bán hàng</h2>
             <div class="funnel-container">
-                <iframe src="07-funnel-visual.html" style="width: 100%; height: 100%; border: none;"></iframe>
+                <iframe src="/ke-hoach/07-funnel-visual.html" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <a href="07-funnel-blueprint.html" target="_blank" class="btn btn-outline">View Blueprint</a>
-                <a href="06-hvco-leadmagnet.html" target="_blank" class="btn btn-outline">View Lead Magnet</a>
+                <a href="/ke-hoach/07-funnel-blueprint.html" class="btn btn-outline">VIEW BLUEPRINT</a>
+                <a href="/ke-hoach/06-hvco-leadmagnet.html" class="btn btn-outline">VIEW LEAD MAGNET</a>
             </div>
         </div>
     </section>
@@ -424,37 +462,37 @@
                     <div class="card-num">Ads</div>
                     <div class="card-title">Ad Copy Machine</div>
                     <p class="card-desc">3 mẫu quảng cáo Facebook/TikTok thu hút.</p>
-                    <a href="08-ads-copy.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Ads</a>
+                    <a href="/ke-hoach/08-ads-copy.html" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Ads</a>
                 </div>
                 <div class="asset-card">
                     <div class="card-num">Live</div>
                     <div class="card-title">Sales Landing Page</div>
                     <p class="card-desc">Trang bán hàng chốt đơn tự động.</p>
-                    <a href="08-landing.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Page</a>
+                    <a href="/ke-hoach/08-landing.html" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Page</a>
                 </div>
                 <div class="asset-card">
                     <div class="card-num">Video</div>
                     <div class="card-title">VSL Script</div>
                     <p class="card-desc">Kịch bản video thuyết phục 2 phút.</p>
-                    <a href="09-vsl-script.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Script</a>
+                    <a href="/ke-hoach/09-vsl-script.html" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Script</a>
                 </div>
                 <div class="asset-card">
                     <div class="card-num">Email</div>
                     <div class="card-title">Email Sequence</div>
                     <p class="card-desc">Chuỗi 5 email chốt đơn 24/7.</p>
-                    <a href="10-email-sequence.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Emails</a>
+                    <a href="/ke-hoach/10-email-sequence.html" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Emails</a>
                 </div>
                 <div class="asset-card">
                     <div class="card-num">CRM</div>
                     <div class="card-title">Follow-up Engine</div>
                     <p class="card-desc">Hệ thống bám đuổi sau 14 ngày.</p>
-                    <a href="11-follow-up.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Flow</a>
+                    <a href="/ke-hoach/11-follow-up.html" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Flow</a>
                 </div>
                 <div class="asset-card">
                     <div class="card-num">Sales</div>
                     <div class="card-title">Sales Guidance</div>
                     <p class="card-desc">Quy trình chốt đơn qua Chat Support.</p>
-                    <a href="12-sales-script.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Guide</a>
+                    <a href="/ke-hoach/12-sales-script.html" class="btn btn-outline" style="margin-top: 1rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">View Guide</a>
                 </div>
             </div>
         </div>
@@ -479,7 +517,7 @@
                     <p style="margin-top: 1rem;">Scale Ads 1-2tr/ngày, đạt mục tiêu doanh thu 100tr/tháng.</p>
                 </div>
             </div>
-            <a href="13-roadmap-asks.html" target="_blank" class="btn btn-outline">View full roadmap</a>
+            <a href="/ke-hoach/13-roadmap-asks.html" class="btn btn-outline">View full roadmap</a>
         </div>
     </section>
 
