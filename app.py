@@ -103,7 +103,7 @@ def supabase_get(table, params=""):
 # ==========================================
 # ROUTES CHO BẢN KẾ HOẠCH KINH DOANH (DAY 20)
 # ==========================================
-@app.route('/ke-hoach')
+@app.route('/ke-hoach', strict_slashes=False)
 def serve_ke_hoach_index():
     return send_from_directory('ke-hoach-kinh-doanh', 'index.html')
 
