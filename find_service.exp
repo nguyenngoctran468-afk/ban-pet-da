@@ -1,0 +1,18 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+set password "HzWbZXXW4e"
+set host "103.97.127.103"
+set port "2018"
+
+spawn ssh -p $port -o StrictHostKeyChecking=no root@$host
+
+expect "password:"
+send "$password\r"
+
+expect "# "
+# Tìm tên service
+send "systemctl list-units --type=service | grep -E 'flask|gunicorn|ban-pet-da|phaodr|my-website'\r"
+expect "# "
+send "exit\r"
+expect eof

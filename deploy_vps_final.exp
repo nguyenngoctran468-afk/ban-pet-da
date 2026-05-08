@@ -1,0 +1,25 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+set password "HzWbZXXW4e"
+set host "103.97.127.103"
+set port "2018"
+
+spawn ssh -p $port -o StrictHostKeyChecking=no root@$host
+
+expect "password:"
+send "$password\r"
+
+expect "# "
+send "cd /opt/my-website\r"
+expect "my-website# "
+send "git pull origin main\r"
+expect "my-website# "
+# Khởi động lại service. Thường thì trên Ubuntu sẽ dùng systemctl. 
+# Tôi sẽ restart nginx và tìm các process python liên quan để đảm bảo Flask nhận code mới.
+send "systemctl restart gunicorn || pkill -HUP gunicorn\r"
+expect "my-website# "
+send "systemctl restart nginx\r"
+expect "my-website# "
+send "exit\r"
+expect eof

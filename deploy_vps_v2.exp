@@ -1,0 +1,34 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+set password "HzWbZXXW4e"
+set host "103.97.127.103"
+set port "2018"
+
+spawn ssh -p $port -o StrictHostKeyChecking=no root@$host
+
+expect "password:"
+send "$password\r"
+
+expect "# "
+# Tìm thư mục chứa app.py
+send "find / -name \"app.py\" -not -path \"*/.*\" 2>/dev/null | head -n 1\r"
+expect {
+    -re "/(.*)/app.py" {
+        set app_path $expect_out(1,string)
+        send "cd /$app_path\r"
+        expect "# "
+        send "git pull origin main\r"
+        expect "# "
+        # Thử tìm tên service
+        send "systemctl list-units --type=service | grep -E 'flask|gunicorn|ban-pet-da|phaodr'\r"
+        expect "# "
+        # Restart dựa trên service tìm thấy hoặc restart nginx nếu dùng proxy
+        send "systemctl restart ban-pet-da || systemctl restart phaodr || systemctl restart gunicorn\r"
+        expect "# "
+        send "nginx -s reload\r"
+    }
+}
+expect "# "
+send "exit\r"
+expect eof

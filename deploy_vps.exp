@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set password "HzWbZXXW4e"
+set host "103.97.127.103"
+set port "2018"
+
+spawn ssh -p $port -o StrictHostKeyChecking=no root@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+
+expect "# "
+send "cd /opt/ban-pet-da || cd /root/ban-pet-da || cd /var/www/ban-pet-da\r"
+expect "# "
+send "git pull origin main\r"
+expect "# "
+send "systemctl restart ban-pet-da || systemctl restart gunicorn\r"
+expect "# "
+send "nginx -s reload\r"
+expect "# "
+send "exit\r"
+expect eof
